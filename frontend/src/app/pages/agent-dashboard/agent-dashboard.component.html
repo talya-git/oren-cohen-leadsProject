@@ -1,0 +1,68 @@
+<div class="min-h-screen bg-[#f9f6f1]" dir="rtl">
+  
+  <header class="sticky top-0 z-20 bg-white border-b border-[#ece7df] px-6 lg:px-10 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <img src="assets/logo.png" alt="" class="w-10 h-10 rounded-full" />
+      <div>
+        <h1 class="font-serif text-base font-medium text-[#1a1a1a] tracking-wide">הלידים שלי</h1>
+        <span class="text-[11px] text-[#c9a96e] font-medium">{{ auth.currentUser?.name }}</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <span class="text-[11px] text-[#c9a96e] border border-[#c9a96e]/30 px-3 py-1 rounded-full font-medium">{{ leads.length }} לידים</span>
+      <button (click)="logout()" class="text-xs text-[#999] hover:text-[#c9a96e] transition-colors">התנתק</button>
+    </div>
+  </header>
+
+  <div class="px-6 lg:px-10 py-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" *ngIf="leads.length; else noLeads">
+    <div *ngFor="let lead of leads" (click)="openDetail(lead)"
+         class="bg-white rounded-xl p-5 cursor-pointer border border-[#ece7df] hover:border-[#c9a96e]/40 hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-sm font-semibold text-[#1a1a1a]">{{ lead.contactName || 'ללא שם' }}</span>
+        <span class="text-[10px] font-semibold px-2.5 py-0.5 rounded-full"
+              [ngClass]="{'bg-red-50 text-red-500': lead.rating==='hot', 'bg-amber-50 text-amber-600': lead.rating==='warm', 'bg-emerald-50 text-emerald-600': lead.rating==='cold', 'bg-gray-50 text-gray-400': lead.rating==='none'}">
+          {{ lead.rating === 'hot' ? '🔴' : lead.rating === 'warm' ? '🟠' : lead.rating === 'cold' ? '🟢' : '—' }}
+        </span>
+      </div>
+      <div class="space-y-1.5 text-xs text-[#6b6b6b]">
+        <div *ngIf="lead.phone">📱 {{ lead.phone }}</div>
+        <div *ngIf="lead.area">📍 {{ lead.area }}</div>
+        <div *ngIf="lead.rooms">🏠 {{ lead.rooms }} חדרים</div>
+        <div *ngIf="lead.budget">💰 {{ lead.budget }}</div>
+      </div>
+      <div class="flex items-center justify-between mt-4 pt-3 border-t border-[#f0ebe3]">
+        <span class="text-[10px] text-[#b5ad9f]">{{ lead.createdAt | date:'dd/MM HH:mm' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noLeads>
+    <p class="text-center text-[#b5ad9f] py-24 text-sm">אין לידים ששויכו אליך עדיין</p>
+  </ng-template>
+
+  <!-- Detail Modal -->
+  <div *ngIf="selectedLead" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4" (click)="closeDetail()">
+    <div class="bg-white rounded-2xl p-7 w-full max-w-lg max-h-[80vh] overflow-y-auto shadow-2xl border border-[#ece7df]" (click)="$event.stopPropagation()">
+      <h2 class="font-serif text-lg font-medium text-[#1a1a1a] mb-2">{{ selectedLead.contactName || 'ללא שם' }}</h2>
+      <a *ngIf="selectedLead.phone" [href]="'tel:'+selectedLead.phone" class="text-[#c9a96e] text-sm font-medium block mb-4">📱 {{ selectedLead.phone }}</a>
+      
+      <div class="grid grid-cols-2 gap-3 mb-5">
+        <div *ngIf="selectedLead.area" class="bg-[#f9f6f1] rounded-lg p-3 text-xs"><span class="text-[#c9a96e] font-medium">אזור:</span> {{ selectedLead.area }}</div>
+        <div *ngIf="selectedLead.rooms" class="bg-[#f9f6f1] rounded-lg p-3 text-xs"><span class="text-[#c9a96e] font-medium">חדרים:</span> {{ selectedLead.rooms }}</div>
+        <div *ngIf="selectedLead.budget" class="bg-[#f9f6f1] rounded-lg p-3 text-xs"><span class="text-[#c9a96e] font-medium">תקציב:</span> {{ selectedLead.budget }}</div>
+        <div *ngIf="selectedLead.intent" class="bg-[#f9f6f1] rounded-lg p-3 text-xs"><span class="text-[#c9a96e] font-medium">סוג:</span> {{ selectedLead.intent }}</div>
+      </div>
+
+      <div *ngIf="getTranscript(selectedLead).length" class="border-t border-[#f0ebe3] pt-4">
+        <h4 class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold mb-3">תמליל שיחה</h4>
+        <div class="space-y-2 max-h-48 overflow-y-auto text-xs text-[#6b6b6b]">
+          <div *ngFor="let msg of getTranscript(selectedLead)">
+            <b>{{ msg.role === 'user' || msg.role === 'client' || msg.speaker === 'client' ? '🧑 לקוח' : '👔 סוכן' }}:</b> {{ msg.content || msg.text }}
+          </div>
+        </div>
+      </div>
+
+      <button (click)="closeDetail()" class="w-full text-xs text-[#999] hover:text-[#1a1a1a] mt-5 transition-colors">סגור</button>
+    </div>
+  </div>
+</div>

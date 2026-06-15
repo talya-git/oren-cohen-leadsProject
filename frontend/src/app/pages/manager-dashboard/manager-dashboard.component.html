@@ -1,0 +1,173 @@
+<div class="min-h-screen bg-[#f9f6f1]" dir="rtl">
+  
+  <!-- Header -->
+  <header class="sticky top-0 z-20 bg-white border-b border-[#ece7df] px-6 lg:px-10 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <img src="assets/logo.png" alt="" class="w-10 h-10 rounded-full" />
+      <div>
+        <h1 class="font-serif text-base font-medium text-[#1a1a1a] tracking-wide">ניהול לידים</h1>
+        <span class="text-[11px] text-[#c9a96e] font-medium">{{ auth.currentUser?.name }} · מנהל</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <span class="text-[11px] text-[#c9a96e] border border-[#c9a96e]/30 px-3 py-1 rounded-full font-medium">{{ filteredLeads.length }} לידים</span>
+      <button (click)="logout()" class="text-xs text-[#999] hover:text-[#c9a96e] transition-colors">התנתק</button>
+    </div>
+  </header>
+
+  <!-- Filters -->
+  <div class="px-6 lg:px-10 py-4 flex flex-wrap gap-2 border-b border-[#ece7df] bg-white/50">
+    <button (click)="filter('all')" [class.active]="currentFilter==='all'" class="text-xs px-4 py-1.5 rounded-full border border-[#ece7df] text-[#999] font-medium transition-all duration-200 hover:border-[#c9a96e]/40 hover:text-[#6b6b6b]">הכל</button>
+    <button (click)="filter('hot')" [class.active]="currentFilter==='hot'" class="text-xs px-4 py-1.5 rounded-full border border-[#ece7df] text-[#999] font-medium transition-all duration-200 hover:border-[#c9a96e]/40 hover:text-[#6b6b6b]">🔴 חם</button>
+    <button (click)="filter('warm')" [class.active]="currentFilter==='warm'" class="text-xs px-4 py-1.5 rounded-full border border-[#ece7df] text-[#999] font-medium transition-all duration-200 hover:border-[#c9a96e]/40 hover:text-[#6b6b6b]">🟠 בינוני</button>
+    <button (click)="filter('cold')" [class.active]="currentFilter==='cold'" class="text-xs px-4 py-1.5 rounded-full border border-[#ece7df] text-[#999] font-medium transition-all duration-200 hover:border-[#c9a96e]/40 hover:text-[#6b6b6b]">🟢 קר</button>
+    <button (click)="filter('new')" [class.active]="currentFilter==='new'" class="text-xs px-4 py-1.5 rounded-full border border-[#ece7df] text-[#999] font-medium transition-all duration-200 hover:border-[#c9a96e]/40 hover:text-[#6b6b6b]">חדש</button>
+    <button (click)="filter('assigned')" [class.active]="currentFilter==='assigned'" class="text-xs px-4 py-1.5 rounded-full border border-[#ece7df] text-[#999] font-medium transition-all duration-200 hover:border-[#c9a96e]/40 hover:text-[#6b6b6b]">שויך</button>
+  </div>
+
+  <!-- Grid -->
+  <div class="px-6 lg:px-10 py-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" *ngIf="filteredLeads.length; else noLeads">
+    <div *ngFor="let lead of filteredLeads" (click)="openDetail(lead)"
+         class="bg-white rounded-xl p-5 cursor-pointer border border-[#ece7df] hover:border-[#c9a96e]/40 hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300"
+         [class.border-l-[3px]]="lead.rating!=='none'"
+         [class.border-l-red-400]="lead.rating==='hot'"
+         [class.border-l-amber-400]="lead.rating==='warm'"
+         [class.border-l-emerald-400]="lead.rating==='cold'">
+      
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-sm font-semibold text-[#1a1a1a]">{{ lead.contactName || 'ללא שם' }}</span>
+        <span class="text-[10px] font-semibold px-2.5 py-0.5 rounded-full"
+              [ngClass]="{
+                'bg-red-50 text-red-500 border border-red-100': lead.rating==='hot',
+                'bg-amber-50 text-amber-600 border border-amber-100': lead.rating==='warm',
+                'bg-emerald-50 text-emerald-600 border border-emerald-100': lead.rating==='cold',
+                'bg-gray-50 text-gray-400 border border-gray-100': lead.rating==='none'
+              }">
+          {{ lead.rating === 'hot' ? '🔴 חם' : lead.rating === 'warm' ? '🟠 בינוני' : lead.rating === 'cold' ? '🟢 קר' : '—' }}
+        </span>
+      </div>
+
+      <div class="space-y-1.5 text-xs text-[#6b6b6b]">
+        <div *ngIf="lead.phone">📱 {{ lead.phone }}</div>
+        <div *ngIf="lead.area">📍 {{ lead.area }}</div>
+        <div *ngIf="lead.rooms">🏠 {{ lead.rooms }} חדרים</div>
+        <div *ngIf="lead.budget">💰 {{ lead.budget }}</div>
+      </div>
+
+      <div class="flex items-center justify-between mt-4 pt-3 border-t border-[#f0ebe3]">
+        <span class="text-[10px] text-[#b5ad9f]">{{ lead.createdAt | date:'dd/MM HH:mm' }}</span>
+        <span *ngIf="lead.assignedToName" class="text-[10px] text-[#c9a96e] font-medium">👤 {{ lead.assignedToName }}</span>
+        <span *ngIf="!lead.assignedToName" class="text-[10px] text-[#ccc]">חדש</span>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noLeads>
+    <p class="text-center text-[#b5ad9f] py-24 text-sm">אין לידים עדיין</p>
+  </ng-template>
+
+  <!-- Detail Modal -->
+  <div *ngIf="showDetailModal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4" (click)="closeDetail()">
+    <div class="bg-white rounded-2xl p-7 w-full max-w-lg max-h-[80vh] overflow-y-auto shadow-2xl border border-[#ece7df]" (click)="$event.stopPropagation()">
+      
+      <div class="flex items-center justify-between mb-5 pb-4 border-b border-[#f0ebe3]">
+        <h2 class="font-serif text-lg font-medium text-[#1a1a1a]">{{ selectedLead?.contactName || 'ללא שם' }}</h2>
+        <a *ngIf="selectedLead?.phone" [href]="'tel:'+selectedLead?.phone" class="text-[#c9a96e] text-sm font-medium">📱 {{ selectedLead?.phone }}</a>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3 mb-5">
+        <div *ngIf="selectedLead?.area" class="bg-[#f9f6f1] rounded-lg p-3 text-xs"><span class="text-[#c9a96e] font-medium">אזור:</span> {{ selectedLead?.area }}</div>
+        <div *ngIf="selectedLead?.rooms" class="bg-[#f9f6f1] rounded-lg p-3 text-xs"><span class="text-[#c9a96e] font-medium">חדרים:</span> {{ selectedLead?.rooms }}</div>
+        <div *ngIf="selectedLead?.budget" class="bg-[#f9f6f1] rounded-lg p-3 text-xs"><span class="text-[#c9a96e] font-medium">תקציב:</span> {{ selectedLead?.budget }}</div>
+        <div *ngIf="selectedLead?.intent" class="bg-[#f9f6f1] rounded-lg p-3 text-xs"><span class="text-[#c9a96e] font-medium">סוג:</span> {{ selectedLead?.intent }}</div>
+        <div *ngIf="selectedLead?.floor" class="bg-[#f9f6f1] rounded-lg p-3 text-xs"><span class="text-[#c9a96e] font-medium">קומה:</span> {{ selectedLead?.floor }}</div>
+        <div *ngIf="selectedLead?.financing" class="bg-[#f9f6f1] rounded-lg p-3 text-xs"><span class="text-[#c9a96e] font-medium">מימון:</span> {{ selectedLead?.financing }}</div>
+        <div *ngIf="selectedLead?.timeline" class="bg-[#f9f6f1] rounded-lg p-3 text-xs"><span class="text-[#c9a96e] font-medium">תזמון:</span> {{ selectedLead?.timeline }}</div>
+      </div>
+
+      <!-- סוג נכס -->
+      <div class="mb-4">
+        <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold block mb-2">סוג נכס</span>
+        <div class="flex flex-wrap gap-2">
+          <button *ngFor="let type of propertyTypes" (click)="updateProperty('propertyType', type)"
+                  class="text-[11px] px-3 py-1.5 rounded-full border transition-all cursor-pointer"
+                  [class]="selectedLead?.propertyType === type ? 'bg-[#c9a96e] text-white border-[#c9a96e]' : 'bg-white border-[#ece7df] text-[#6b6b6b] hover:border-[#c9a96e]'">
+            {{ type }}
+          </button>
+        </div>
+      </div>
+
+      <!-- תוספות -->
+      <div class="mb-4">
+        <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold block mb-2">תוספות</span>
+        <div class="flex flex-wrap gap-2">
+          <label *ngFor="let amenity of allAmenities" class="flex items-center gap-1.5 text-[11px] bg-white border border-[#ece7df] px-3 py-1.5 rounded-full cursor-pointer hover:border-[#c9a96e] transition-all"
+                 [class.bg-[#c9a96e]]="isAmenitySelected(amenity)" [class.text-white]="isAmenitySelected(amenity)" [class.border-[#c9a96e]]="isAmenitySelected(amenity)">
+            <input type="checkbox" [checked]="isAmenitySelected(amenity)" (change)="toggleAmenity(amenity)" class="hidden" />
+            {{ amenity }}
+          </label>
+        </div>
+      </div>
+
+      <!-- כיווני אוויר -->
+      <div class="mb-4">
+        <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold block mb-2">כיווני אוויר</span>
+        <div class="flex gap-2">
+          <button *ngFor="let n of [1,2,3,4]" (click)="updateProperty('airDirections', n)"
+                  class="w-10 h-10 rounded-lg border text-sm font-semibold transition-all cursor-pointer"
+                  [class]="selectedLead?.airDirections === n ? 'bg-[#c9a96e] text-white border-[#c9a96e]' : 'bg-white border-[#ece7df] text-[#6b6b6b] hover:border-[#c9a96e]'">
+            {{ n }}
+          </button>
+        </div>
+      </div>
+
+      <!-- קרבה ל -->
+      <div class="mb-5">
+        <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold block mb-2">קרבה ל</span>
+        <div class="flex flex-wrap gap-2">
+          <label *ngFor="let place of allNearBy" class="flex items-center gap-1.5 text-[11px] bg-white border border-[#ece7df] px-3 py-1.5 rounded-full cursor-pointer hover:border-[#c9a96e] transition-all"
+                 [class.bg-[#c9a96e]]="isNearBySelected(place)" [class.text-white]="isNearBySelected(place)" [class.border-[#c9a96e]]="isNearBySelected(place)">
+            <input type="checkbox" [checked]="isNearBySelected(place)" (change)="toggleNearBy(place)" class="hidden" />
+            {{ place }}
+          </label>
+        </div>
+      </div>
+
+      <!-- Rating -->
+      <div class="flex gap-3 mb-4">
+        <button (click)="rateLead(selectedLead!.id, 'hot')" class="flex-1 py-2.5 rounded-lg text-xs font-semibold border border-red-200 text-red-500 hover:bg-red-50 transition-colors">🔴 חם</button>
+        <button (click)="rateLead(selectedLead!.id, 'warm')" class="flex-1 py-2.5 rounded-lg text-xs font-semibold border border-amber-200 text-amber-600 hover:bg-amber-50 transition-colors">🟠 בינוני</button>
+        <button (click)="rateLead(selectedLead!.id, 'cold')" class="flex-1 py-2.5 rounded-lg text-xs font-semibold border border-emerald-200 text-emerald-600 hover:bg-emerald-50 transition-colors">🟢 קר</button>
+      </div>
+
+      <button (click)="openAssign(selectedLead!)" class="w-full py-2.5 rounded-lg text-xs font-semibold border border-[#c9a96e] text-[#c9a96e] hover:bg-[#c9a96e]/5 transition-colors mb-5">👤 שייך לסוכן</button>
+
+      <!-- Transcript -->
+      <div *ngIf="getTranscript(selectedLead!).length" class="border-t border-[#f0ebe3] pt-4 mt-4">
+        <h4 class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold mb-3">תמליל שיחה</h4>
+        <div class="space-y-2 max-h-48 overflow-y-auto text-xs text-[#6b6b6b]">
+          <div *ngFor="let msg of getTranscript(selectedLead!)">
+            <b>{{ msg.role === 'user' || msg.role === 'client' || msg.speaker === 'client' ? '🧑 לקוח' : '👔 סוכן' }}:</b> {{ msg.content || msg.text }}
+          </div>
+        </div>
+      </div>
+
+      <button (click)="deleteLead(selectedLead!.id)" class="w-full text-[11px] text-red-300 hover:text-red-500 mt-5 transition-colors">🗑 מחק ליד</button>
+      <button (click)="closeDetail()" class="w-full text-xs text-[#999] hover:text-[#1a1a1a] mt-2 transition-colors">סגור</button>
+    </div>
+  </div>
+
+  <!-- Assign Modal -->
+  <div *ngIf="showAssignModal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4" (click)="closeAssign()">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl border border-[#ece7df]" (click)="$event.stopPropagation()">
+      <h3 class="font-serif text-base font-medium text-[#1a1a1a] mb-4">שייך לסוכן</h3>
+      <div class="space-y-1">
+        <button *ngFor="let agent of agents" (click)="assignTo(agent.id)"
+                class="w-full text-right px-4 py-3 rounded-lg text-sm text-[#4a4a4a] hover:bg-[#f9f6f1] hover:text-[#c9a96e] transition-colors font-medium">
+          👤 {{ agent.name }}
+        </button>
+      </div>
+      <button (click)="closeAssign()" class="w-full text-xs text-[#999] mt-4 hover:text-[#1a1a1a] transition-colors">ביטול</button>
+    </div>
+  </div>
+</div>
