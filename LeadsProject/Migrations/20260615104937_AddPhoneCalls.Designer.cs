@@ -4,6 +4,7 @@ using LeadsProject.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LeadsProject.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260615104937_AddPhoneCalls")]
+    partial class AddPhoneCalls
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,9 +54,6 @@ namespace LeadsProject.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Financing")
                         .HasColumnType("nvarchar(max)");
 
@@ -83,9 +83,6 @@ namespace LeadsProject.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Rooms")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Source")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
@@ -241,7 +238,7 @@ namespace LeadsProject.Migrations
                             Id = 1,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "מנהל",
-                            PasswordHash = "$2a$11$SJRbg5jXtT85yQLkRChLYuvRDd5Ot5c2TgDMG5ucG.IMQ65OA/RZq",
+                            PasswordHash = "$2a$11$dbmf3NkHS1vlCeQsItm/N.vH0/V/3djqlaTlY8Ju/2m6dWT6W8QCu",
                             Role = "manager"
                         },
                         new
@@ -249,6 +246,7 @@ namespace LeadsProject.Migrations
                             Id = 2,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "אריה",
+                            PasswordHash = "$2a$11$uNZfTiZUOcvitu0XVrwV3OrrE/NHXQAKyaZNrBwjbF5XCBlP5pkDu",
                             Role = "agent"
                         },
                         new
@@ -256,6 +254,7 @@ namespace LeadsProject.Migrations
                             Id = 3,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "דב",
+                            PasswordHash = "$2a$11$rQlA.QIpOLIyq4V9KNPV0.GGV.AhlLcJ7AJR98ws65Axfpm7vgtF2",
                             Role = "agent"
                         },
                         new
@@ -263,6 +262,7 @@ namespace LeadsProject.Migrations
                             Id = 4,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "רבקה",
+                            PasswordHash = "$2a$11$inJ3SalgBlZlCbfSvQdlVeWDkFuVNa..RUau3iRkaNiHGZrY3l6bu",
                             Role = "agent"
                         },
                         new
@@ -270,6 +270,7 @@ namespace LeadsProject.Migrations
                             Id = 5,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "מוישי",
+                            PasswordHash = "$2a$11$DHln4/xpzT.frwOBpj9Cmey2Cl2n0HOTBsbcNeu3hSf07fJhFGsre",
                             Role = "agent"
                         },
                         new
@@ -277,6 +278,7 @@ namespace LeadsProject.Migrations
                             Id = 6,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "מיכאל",
+                            PasswordHash = "$2a$11$zwWqrHSExHrLVynIKASTeuCAfUV1v6FCdEjtXtw4NjGLHnq/rtXM6",
                             Role = "agent"
                         },
                         new
@@ -284,6 +286,7 @@ namespace LeadsProject.Migrations
                             Id = 7,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "אהרון",
+                            PasswordHash = "$2a$11$p3l0YLvuCMhRy2bz1qhT0OumFpniQQH/gGIAMXwdqB7rf2vDvwGqO",
                             Role = "agent"
                         },
                         new
@@ -291,6 +294,7 @@ namespace LeadsProject.Migrations
                             Id = 8,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "ליסה",
+                            PasswordHash = "$2a$11$K6hgNYxIbsuNXr8teZdzUuNh5lbogkxR8lUmrqqQPDHJ7B3UH7Gby",
                             Role = "agent"
                         });
                 });

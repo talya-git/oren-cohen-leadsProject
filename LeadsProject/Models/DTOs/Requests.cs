@@ -11,6 +11,8 @@ public record UpdateLeadRequest(
     string? Notes,
     string? ContactName,
     string? Phone,
+    string? Email,
+    string? Source,
     string? Budget,
     string? Area,
     string? Rooms,
@@ -27,6 +29,8 @@ public record UpdateLeadRequest(
 public record CreateLeadRequest(
     string? ContactName,
     string? Phone,
+    string? Email,
+    string? Source,
     string? Budget,
     string? Area,
     string? Rooms,
@@ -40,3 +44,5 @@ public record CreateLeadRequest(
     string? NearBy,
     string? Transcript
 );
+
+public record AddPhoneCallRequest(string Agent, string Title, string Summary);

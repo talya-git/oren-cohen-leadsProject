@@ -135,5 +135,39 @@ export class ManagerDashboardComponent implements OnInit {
     });
   }
 
+  updateField(field: string, event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.updateProperty(field, value);
+  }
+
+  // Phone calls
+  showCallForm = false;
+  newCallTitle = '';
+  newCallSummary = '';
+
+  getPhoneCalls(lead: Lead): any[] {
+    try { return JSON.parse((lead as any).phoneCalls || '[]'); } catch { return []; }
+  }
+
+  toggleCallForm(): void {
+    this.showCallForm = !this.showCallForm;
+    this.newCallTitle = '';
+    this.newCallSummary = '';
+  }
+
+  addPhoneCall(): void {
+    if (!this.selectedLead || !this.newCallSummary.trim()) return;
+    const agent = this.auth.currentUser?.name || 'מנהל';
+    this.leadsService.addPhoneCall(this.selectedLead.id, agent, this.newCallTitle, this.newCallSummary).subscribe(() => {
+      this.showCallForm = false;
+      this.newCallSummary = '';
+      this.loadLeads();
+      // refresh selected lead
+      this.leadsService.getAllLeads().subscribe(leads => {
+        this.selectedLead = leads.find(l => l.id === this.selectedLead!.id) || null;
+      });
+    });
+  }
+
   logout(): void { this.auth.logout(); }
 }

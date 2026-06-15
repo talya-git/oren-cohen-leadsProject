@@ -14,13 +14,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
         modelBuilder.Entity<User>().HasData(
             new User { Id = 1, Name = "מנהל", PasswordHash = BCrypt.Net.BCrypt.HashPassword("1234"), Role = "manager", CreatedAt = seedDate },
-            new User { Id = 2, Name = "אריה", PasswordHash = BCrypt.Net.BCrypt.HashPassword("1234"), Role = "agent", CreatedAt = seedDate },
-            new User { Id = 3, Name = "דב", PasswordHash = BCrypt.Net.BCrypt.HashPassword("1234"), Role = "agent", CreatedAt = seedDate },
-            new User { Id = 4, Name = "רבקה", PasswordHash = BCrypt.Net.BCrypt.HashPassword("1234"), Role = "agent", CreatedAt = seedDate },
-            new User { Id = 5, Name = "מוישי", PasswordHash = BCrypt.Net.BCrypt.HashPassword("1234"), Role = "agent", CreatedAt = seedDate },
-            new User { Id = 6, Name = "מיכאל", PasswordHash = BCrypt.Net.BCrypt.HashPassword("1234"), Role = "agent", CreatedAt = seedDate },
-            new User { Id = 7, Name = "אהרון", PasswordHash = BCrypt.Net.BCrypt.HashPassword("1234"), Role = "agent", CreatedAt = seedDate },
-            new User { Id = 8, Name = "ליסה", PasswordHash = BCrypt.Net.BCrypt.HashPassword("1234"), Role = "agent", CreatedAt = seedDate }
+            new User { Id = 2, Name = "אריה", PasswordHash = null, Role = "agent", CreatedAt = seedDate },
+            new User { Id = 3, Name = "דב", PasswordHash = null, Role = "agent", CreatedAt = seedDate },
+            new User { Id = 4, Name = "רבקה", PasswordHash = null, Role = "agent", CreatedAt = seedDate },
+            new User { Id = 5, Name = "מוישי", PasswordHash = null, Role = "agent", CreatedAt = seedDate },
+            new User { Id = 6, Name = "מיכאל", PasswordHash = null, Role = "agent", CreatedAt = seedDate },
+            new User { Id = 7, Name = "אהרון", PasswordHash = null, Role = "agent", CreatedAt = seedDate },
+            new User { Id = 8, Name = "ליסה", PasswordHash = null, Role = "agent", CreatedAt = seedDate }
         );
 
         var transcript1 = """

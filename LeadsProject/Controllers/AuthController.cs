@@ -32,4 +32,13 @@ public class AuthController(AppDbContext db, JwtService jwt) : ControllerBase
 
         return Ok(new { token = jwt.GenerateToken(user), user = new { user.Id, user.Name, user.Role } });
     }
+
+    [HttpPost("check-user")]
+    public async Task<IActionResult> CheckUser([FromBody] Dictionary<string, string> body)
+    {
+        var name = body.GetValueOrDefault("name", "");
+        var user = await db.Users.FirstOrDefaultAsync(u => u.Name == name);
+        if (user == null) return NotFound("משתמש לא נמצא");
+        return Ok(new { hasPassword = user.PasswordHash != null, role = user.Role });
+    }
 }

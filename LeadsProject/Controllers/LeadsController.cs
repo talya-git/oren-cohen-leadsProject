@@ -32,7 +32,8 @@ public class LeadsController(AppDbContext db) : ControllerBase
     {
         var lead = new Lead
         {
-            ContactName = req.ContactName, Phone = req.Phone, Budget = req.Budget,
+            ContactName = req.ContactName, Phone = req.Phone, Email = req.Email,
+            Source = req.Source, Budget = req.Budget,
             Area = req.Area, Rooms = req.Rooms, PropertyType = req.PropertyType,
             Floor = req.Floor, Financing = req.Financing, Timeline = req.Timeline,
             Intent = req.Intent, Amenities = req.Amenities, AirDirections = req.AirDirections,
@@ -54,6 +55,8 @@ public class LeadsController(AppDbContext db) : ControllerBase
         if (req.Notes != null) lead.Notes = req.Notes;
         if (req.ContactName != null) lead.ContactName = req.ContactName;
         if (req.Phone != null) lead.Phone = req.Phone;
+        if (req.Email != null) lead.Email = req.Email;
+        if (req.Source != null) lead.Source = req.Source;
         if (req.Budget != null) lead.Budget = req.Budget;
         if (req.Area != null) lead.Area = req.Area;
         if (req.Rooms != null) lead.Rooms = req.Rooms;
@@ -94,5 +97,24 @@ public class LeadsController(AppDbContext db) : ControllerBase
         db.Leads.Remove(lead);
         await db.SaveChangesAsync();
         return NoContent();
+    }
+
+    [HttpPost("{id}/phone-call")]
+    public async Task<IActionResult> AddPhoneCall(int id, AddPhoneCallRequest req)
+    {
+        var lead = await db.Leads.FindAsync(id);
+        if (lead == null) return NotFound();
+
+        var calls = string.IsNullOrEmpty(lead.PhoneCalls)
+            ? new List<object>()
+            : System.Text.Json.JsonSerializer.Deserialize<List<object>>(lead.PhoneCalls) ?? new List<object>();
+
+        var newCall = new { date = DateTime.UtcNow.ToString("o"), agent = req.Agent, title = req.Title, summary = req.Summary };
+        calls.Add(newCall);
+
+        lead.PhoneCalls = System.Text.Json.JsonSerializer.Serialize(calls);
+        lead.UpdatedAt = DateTime.UtcNow;
+        await db.SaveChangesAsync();
+        return Ok(lead);
     }
 }

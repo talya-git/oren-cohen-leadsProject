@@ -8,6 +8,8 @@ export interface Lead {
   id: number;
   contactName: string;
   phone: string;
+  email: string;
+  source: string;
   budget: string;
   area: string;
   rooms: string;
@@ -63,6 +65,10 @@ export class LeadsService {
 
   deleteLead(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/leads/${id}`, { headers: this.headers });
+  }
+
+  addPhoneCall(leadId: number, agent: string, title: string, summary: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/leads/${leadId}/phone-call`, { agent, title, summary }, { headers: this.headers });
   }
 
   getAgents(): Observable<Agent[]> {

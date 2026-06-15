@@ -68,21 +68,67 @@
 
   <!-- Detail Modal -->
   <div *ngIf="showDetailModal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4" (click)="closeDetail()">
-    <div class="bg-white rounded-2xl p-7 w-full max-w-lg max-h-[80vh] overflow-y-auto shadow-2xl border border-[#ece7df]" (click)="$event.stopPropagation()">
+    <div class="bg-white rounded-2xl p-7 w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl border border-[#ece7df]" (click)="$event.stopPropagation()">
       
       <div class="flex items-center justify-between mb-5 pb-4 border-b border-[#f0ebe3]">
-        <h2 class="font-serif text-lg font-medium text-[#1a1a1a]">{{ selectedLead?.contactName || 'ללא שם' }}</h2>
-        <a *ngIf="selectedLead?.phone" [href]="'tel:'+selectedLead?.phone" class="text-[#c9a96e] text-sm font-medium">📱 {{ selectedLead?.phone }}</a>
+        <div class="flex-1">
+          <input type="text" [value]="selectedLead?.contactName || ''" (change)="updateField('contactName', $event)" class="font-serif text-lg font-medium text-[#1a1a1a] bg-transparent outline-none w-full" placeholder="שם הלקוח" />
+        </div>
+        <div>
+          <input type="text" [value]="selectedLead?.phone || ''" (change)="updateField('phone', $event)" class="text-[#c9a96e] text-sm font-medium bg-transparent outline-none text-left w-36" placeholder="טלפון" />
+        </div>
       </div>
 
       <div class="grid grid-cols-2 gap-3 mb-5">
-        <div *ngIf="selectedLead?.area" class="bg-[#f9f6f1] rounded-lg p-3 text-xs"><span class="text-[#c9a96e] font-medium">אזור:</span> {{ selectedLead?.area }}</div>
-        <div *ngIf="selectedLead?.rooms" class="bg-[#f9f6f1] rounded-lg p-3 text-xs"><span class="text-[#c9a96e] font-medium">חדרים:</span> {{ selectedLead?.rooms }}</div>
-        <div *ngIf="selectedLead?.budget" class="bg-[#f9f6f1] rounded-lg p-3 text-xs"><span class="text-[#c9a96e] font-medium">תקציב:</span> {{ selectedLead?.budget }}</div>
-        <div *ngIf="selectedLead?.intent" class="bg-[#f9f6f1] rounded-lg p-3 text-xs"><span class="text-[#c9a96e] font-medium">סוג:</span> {{ selectedLead?.intent }}</div>
-        <div *ngIf="selectedLead?.floor" class="bg-[#f9f6f1] rounded-lg p-3 text-xs"><span class="text-[#c9a96e] font-medium">קומה:</span> {{ selectedLead?.floor }}</div>
-        <div *ngIf="selectedLead?.financing" class="bg-[#f9f6f1] rounded-lg p-3 text-xs"><span class="text-[#c9a96e] font-medium">מימון:</span> {{ selectedLead?.financing }}</div>
-        <div *ngIf="selectedLead?.timeline" class="bg-[#f9f6f1] rounded-lg p-3 text-xs"><span class="text-[#c9a96e] font-medium">תזמון:</span> {{ selectedLead?.timeline }}</div>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">אזור</label>
+          <input type="text" [value]="selectedLead?.area || ''" (change)="updateField('area', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="לא צוין" />
+        </div>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">חדרים</label>
+          <input type="text" [value]="selectedLead?.rooms || ''" (change)="updateField('rooms', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="לא צוין" />
+        </div>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">תקציב</label>
+          <input type="text" [value]="selectedLead?.budget || ''" (change)="updateField('budget', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="לא צוין" />
+        </div>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">סוג</label>
+          <input type="text" [value]="selectedLead?.intent || ''" (change)="updateField('intent', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="קניה/שכירות/השקעה" />
+        </div>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">קומה</label>
+          <input type="text" [value]="selectedLead?.floor || ''" (change)="updateField('floor', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="לא צוין" />
+        </div>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">מימון</label>
+          <input type="text" [value]="selectedLead?.financing || ''" (change)="updateField('financing', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="הון עצמי/משכנתא" />
+        </div>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">תזמון</label>
+          <input type="text" [value]="selectedLead?.timeline || ''" (change)="updateField('timeline', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="לא צוין" />
+        </div>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">הערות</label>
+          <input type="text" [value]="selectedLead?.notes || ''" (change)="updateField('notes', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="הוסף הערה..." />
+        </div>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">מייל</label>
+          <input type="email" [value]="selectedLead?.email || ''" (change)="updateField('email', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="לא צוין" />
+        </div>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">מקור הגעה</label>
+          <select [value]="selectedLead?.source || ''" (change)="updateField('source', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs cursor-pointer">
+            <option value="">לא צוין</option>
+            <option value="פייסבוק">פייסבוק</option>
+            <option value="גוגל">גוגל</option>
+            <option value="יד 2">יד 2</option>
+            <option value="אתר">אתר</option>
+            <option value="המלצה">המלצה</option>
+            <option value="טלפון">טלפון</option>
+            <option value="אחר">אחר</option>
+          </select>
+        </div>
       </div>
 
       <!-- סוג נכס -->
@@ -133,6 +179,36 @@
         </div>
       </div>
 
+      <!-- שיחות טלפוניות -->
+      <div class="mb-5">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold">שיחות טלפוניות</span>
+          <button (click)="toggleCallForm()" class="text-[11px] text-[#c9a96e] font-medium hover:underline">+ הוסף שיחה</button>
+        </div>
+
+        <div *ngIf="showCallForm" class="bg-[#f9f6f1] rounded-lg p-3 mb-3">
+          <input type="text" [(ngModel)]="newCallTitle" placeholder="כותרת השיחה" class="w-full bg-white border border-[#ece7df] rounded-lg p-2 text-xs outline-none mb-2 focus:border-[#c9a96e]" />
+          <textarea [(ngModel)]="newCallSummary" rows="3" placeholder="מה היה בשיחה?" class="w-full bg-white border border-[#ece7df] rounded-lg p-2 text-xs outline-none resize-none focus:border-[#c9a96e]"></textarea>
+          <div class="flex gap-2 mt-2">
+            <button (click)="addPhoneCall()" class="text-[11px] bg-[#c9a96e] text-white px-3 py-1.5 rounded-lg font-medium hover:bg-[#b08d4f]">שמור</button>
+            <button (click)="toggleCallForm()" class="text-[11px] text-[#999] px-3 py-1.5">ביטול</button>
+          </div>
+        </div>
+
+        <!-- היסטוריית שיחות -->
+        <div *ngIf="getPhoneCalls(selectedLead!).length" class="space-y-2 max-h-40 overflow-y-auto">
+          <div *ngFor="let call of getPhoneCalls(selectedLead!)" class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-[#1a1a1a] font-semibold">{{ call.title || 'שיחה' }}</span>
+              <span class="text-[#b5ad9f] text-[10px]">{{ call.date | date:'dd/MM HH:mm' }}</span>
+            </div>
+            <div class="text-[#c9a96e] text-[10px] mb-1">📞 {{ call.agent }}</div>
+            <p class="text-[#4a4a4a]">{{ call.summary }}</p>
+          </div>
+        </div>
+        <p *ngIf="!getPhoneCalls(selectedLead!).length && !showCallForm" class="text-[11px] text-[#ccc]">אין שיחות טלפוניות עדיין</p>
+      </div>
+
       <!-- Rating -->
       <div class="flex gap-3 mb-4">
         <button (click)="rateLead(selectedLead!.id, 'hot')" class="flex-1 py-2.5 rounded-lg text-xs font-semibold border border-red-200 text-red-500 hover:bg-red-50 transition-colors">🔴 חם</button>
@@ -143,14 +219,14 @@
       <button (click)="openAssign(selectedLead!)" class="w-full py-2.5 rounded-lg text-xs font-semibold border border-[#c9a96e] text-[#c9a96e] hover:bg-[#c9a96e]/5 transition-colors mb-5">👤 שייך לסוכן</button>
 
       <!-- Transcript -->
-      <div *ngIf="getTranscript(selectedLead!).length" class="border-t border-[#f0ebe3] pt-4 mt-4">
-        <h4 class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold mb-3">תמליל שיחה</h4>
-        <div class="space-y-2 max-h-48 overflow-y-auto text-xs text-[#6b6b6b]">
+      <details *ngIf="getTranscript(selectedLead!).length" class="border-t border-[#f0ebe3] pt-4 mt-4">
+        <summary class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold cursor-pointer hover:text-[#b08d4f]">תמליל שיחה עם בוט ▾</summary>
+        <div class="space-y-2 max-h-48 overflow-y-auto text-xs text-[#6b6b6b] mt-3">
           <div *ngFor="let msg of getTranscript(selectedLead!)">
             <b>{{ msg.role === 'user' || msg.role === 'client' || msg.speaker === 'client' ? '🧑 לקוח' : '👔 סוכן' }}:</b> {{ msg.content || msg.text }}
           </div>
         </div>
-      </div>
+      </details>
 
       <button (click)="deleteLead(selectedLead!.id)" class="w-full text-[11px] text-red-300 hover:text-red-500 mt-5 transition-colors">🗑 מחק ליד</button>
       <button (click)="closeDetail()" class="w-full text-xs text-[#999] hover:text-[#1a1a1a] mt-2 transition-colors">סגור</button>

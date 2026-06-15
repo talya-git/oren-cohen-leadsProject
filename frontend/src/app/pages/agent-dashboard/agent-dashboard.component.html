@@ -42,25 +42,157 @@
 
   <!-- Detail Modal -->
   <div *ngIf="selectedLead" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4" (click)="closeDetail()">
-    <div class="bg-white rounded-2xl p-7 w-full max-w-lg max-h-[80vh] overflow-y-auto shadow-2xl border border-[#ece7df]" (click)="$event.stopPropagation()">
-      <h2 class="font-serif text-lg font-medium text-[#1a1a1a] mb-2">{{ selectedLead.contactName || 'ללא שם' }}</h2>
-      <a *ngIf="selectedLead.phone" [href]="'tel:'+selectedLead.phone" class="text-[#c9a96e] text-sm font-medium block mb-4">📱 {{ selectedLead.phone }}</a>
+    <div class="bg-white rounded-2xl p-7 w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl border border-[#ece7df]" (click)="$event.stopPropagation()">
       
-      <div class="grid grid-cols-2 gap-3 mb-5">
-        <div *ngIf="selectedLead.area" class="bg-[#f9f6f1] rounded-lg p-3 text-xs"><span class="text-[#c9a96e] font-medium">אזור:</span> {{ selectedLead.area }}</div>
-        <div *ngIf="selectedLead.rooms" class="bg-[#f9f6f1] rounded-lg p-3 text-xs"><span class="text-[#c9a96e] font-medium">חדרים:</span> {{ selectedLead.rooms }}</div>
-        <div *ngIf="selectedLead.budget" class="bg-[#f9f6f1] rounded-lg p-3 text-xs"><span class="text-[#c9a96e] font-medium">תקציב:</span> {{ selectedLead.budget }}</div>
-        <div *ngIf="selectedLead.intent" class="bg-[#f9f6f1] rounded-lg p-3 text-xs"><span class="text-[#c9a96e] font-medium">סוג:</span> {{ selectedLead.intent }}</div>
+      <!-- Header -->
+      <div class="flex items-center justify-between mb-5 pb-4 border-b border-[#f0ebe3]">
+        <div class="flex-1">
+          <input type="text" [value]="selectedLead?.contactName || ''" (change)="updateField('contactName', $event)" class="font-serif text-lg font-medium text-[#1a1a1a] bg-transparent outline-none w-full" placeholder="שם הלקוח" />
+        </div>
+        <div>
+          <input type="text" [value]="selectedLead?.phone || ''" (change)="updateField('phone', $event)" class="text-[#c9a96e] text-sm font-medium bg-transparent outline-none text-left w-36" placeholder="טלפון" />
+        </div>
       </div>
 
-      <div *ngIf="getTranscript(selectedLead).length" class="border-t border-[#f0ebe3] pt-4">
-        <h4 class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold mb-3">תמליל שיחה</h4>
-        <div class="space-y-2 max-h-48 overflow-y-auto text-xs text-[#6b6b6b]">
+      <!-- Fields Grid -->
+      <div class="grid grid-cols-2 gap-3 mb-5">
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">אזור</label>
+          <input type="text" [value]="selectedLead?.area || ''" (change)="updateField('area', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="לא צוין" />
+        </div>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">חדרים</label>
+          <input type="text" [value]="selectedLead?.rooms || ''" (change)="updateField('rooms', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="לא צוין" />
+        </div>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">תקציב</label>
+          <input type="text" [value]="selectedLead?.budget || ''" (change)="updateField('budget', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="לא צוין" />
+        </div>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">סוג</label>
+          <input type="text" [value]="selectedLead?.intent || ''" (change)="updateField('intent', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="קניה/שכירות/השקעה" />
+        </div>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">קומה</label>
+          <input type="text" [value]="selectedLead?.floor || ''" (change)="updateField('floor', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="לא צוין" />
+        </div>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">מימון</label>
+          <input type="text" [value]="selectedLead?.financing || ''" (change)="updateField('financing', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="הון עצמי/משכנתא" />
+        </div>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">תזמון</label>
+          <input type="text" [value]="selectedLead?.timeline || ''" (change)="updateField('timeline', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="לא צוין" />
+        </div>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">מייל</label>
+          <input type="email" [value]="selectedLead?.email || ''" (change)="updateField('email', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="לא צוין" />
+        </div>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">מקור הגעה</label>
+          <select [value]="selectedLead?.source || ''" (change)="updateField('source', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs cursor-pointer">
+            <option value="">לא צוין</option>
+            <option value="פייסבוק">פייסבוק</option>
+            <option value="גוגל">גוגל</option>
+            <option value="יד 2">יד 2</option>
+            <option value="אתר">אתר</option>
+            <option value="המלצה">המלצה</option>
+            <option value="טלפון">טלפון</option>
+            <option value="אחר">אחר</option>
+          </select>
+        </div>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">הערות</label>
+          <input type="text" [value]="selectedLead?.notes || ''" (change)="updateField('notes', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="הוסף הערה..." />
+        </div>
+      </div>
+
+      <!-- סוג נכס -->
+      <div class="mb-4">
+        <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold block mb-2">סוג נכס</span>
+        <div class="flex flex-wrap gap-2">
+          <button *ngFor="let type of propertyTypes" (click)="updateProperty('propertyType', type)"
+                  class="text-[11px] px-3 py-1.5 rounded-full border transition-all cursor-pointer"
+                  [class]="selectedLead?.propertyType === type ? 'bg-[#c9a96e] text-white border-[#c9a96e]' : 'bg-white border-[#ece7df] text-[#6b6b6b] hover:border-[#c9a96e]'">
+            {{ type }}
+          </button>
+        </div>
+      </div>
+
+      <!-- תוספות -->
+      <div class="mb-4">
+        <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold block mb-2">תוספות</span>
+        <div class="flex flex-wrap gap-2">
+          <label *ngFor="let amenity of allAmenities" class="flex items-center gap-1.5 text-[11px] bg-white border border-[#ece7df] px-3 py-1.5 rounded-full cursor-pointer hover:border-[#c9a96e] transition-all"
+                 [class.bg-[#c9a96e]]="isAmenitySelected(amenity)" [class.text-white]="isAmenitySelected(amenity)" [class.border-[#c9a96e]]="isAmenitySelected(amenity)">
+            <input type="checkbox" [checked]="isAmenitySelected(amenity)" (change)="toggleAmenity(amenity)" class="hidden" />
+            {{ amenity }}
+          </label>
+        </div>
+      </div>
+
+      <!-- כיווני אוויר -->
+      <div class="mb-4">
+        <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold block mb-2">כיווני אוויר</span>
+        <div class="flex gap-2">
+          <button *ngFor="let n of [1,2,3,4]" (click)="updateProperty('airDirections', n)"
+                  class="w-10 h-10 rounded-lg border text-sm font-semibold transition-all cursor-pointer"
+                  [class]="selectedLead?.airDirections === n ? 'bg-[#c9a96e] text-white border-[#c9a96e]' : 'bg-white border-[#ece7df] text-[#6b6b6b] hover:border-[#c9a96e]'">
+            {{ n }}
+          </button>
+        </div>
+      </div>
+
+      <!-- קרבה ל -->
+      <div class="mb-5">
+        <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold block mb-2">קרבה ל</span>
+        <div class="flex flex-wrap gap-2">
+          <label *ngFor="let place of allNearBy" class="flex items-center gap-1.5 text-[11px] bg-white border border-[#ece7df] px-3 py-1.5 rounded-full cursor-pointer hover:border-[#c9a96e] transition-all"
+                 [class.bg-[#c9a96e]]="isNearBySelected(place)" [class.text-white]="isNearBySelected(place)" [class.border-[#c9a96e]]="isNearBySelected(place)">
+            <input type="checkbox" [checked]="isNearBySelected(place)" (change)="toggleNearBy(place)" class="hidden" />
+            {{ place }}
+          </label>
+        </div>
+      </div>
+
+      <!-- שיחות טלפוניות -->
+      <div class="mb-5">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold">שיחות טלפוניות</span>
+          <button (click)="toggleCallForm()" class="text-[11px] text-[#c9a96e] font-medium hover:underline">+ הוסף שיחה</button>
+        </div>
+
+        <div *ngIf="showCallForm" class="bg-[#f9f6f1] rounded-lg p-3 mb-3">
+          <input type="text" [(ngModel)]="newCallTitle" placeholder="כותרת השיחה" class="w-full bg-white border border-[#ece7df] rounded-lg p-2 text-xs outline-none mb-2 focus:border-[#c9a96e]" />
+          <textarea [(ngModel)]="newCallSummary" rows="3" placeholder="מה היה בשיחה?" class="w-full bg-white border border-[#ece7df] rounded-lg p-2 text-xs outline-none resize-none focus:border-[#c9a96e]"></textarea>
+          <div class="flex gap-2 mt-2">
+            <button (click)="addPhoneCall()" class="text-[11px] bg-[#c9a96e] text-white px-3 py-1.5 rounded-lg font-medium hover:bg-[#b08d4f]">שמור</button>
+            <button (click)="toggleCallForm()" class="text-[11px] text-[#999] px-3 py-1.5">ביטול</button>
+          </div>
+        </div>
+
+        <div *ngIf="getPhoneCalls(selectedLead).length" class="space-y-2 max-h-40 overflow-y-auto">
+          <div *ngFor="let call of getPhoneCalls(selectedLead)" class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-[#1a1a1a] font-semibold">{{ call.title || 'שיחה' }}</span>
+              <span class="text-[#b5ad9f] text-[10px]">{{ call.date | date:'dd/MM HH:mm' }}</span>
+            </div>
+            <div class="text-[#c9a96e] text-[10px] mb-1">📞 {{ call.agent }}</div>
+            <p class="text-[#4a4a4a]">{{ call.summary }}</p>
+          </div>
+        </div>
+        <p *ngIf="!getPhoneCalls(selectedLead).length && !showCallForm" class="text-[11px] text-[#ccc]">אין שיחות טלפוניות עדיין</p>
+      </div>
+
+      <!-- תמליל שיחה (נפתח) -->
+      <details *ngIf="getTranscript(selectedLead).length" class="border-t border-[#f0ebe3] pt-4 mt-4">
+        <summary class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold cursor-pointer hover:text-[#b08d4f]">תמליל שיחה עם בוט ▾</summary>
+        <div class="space-y-2 max-h-48 overflow-y-auto text-xs text-[#6b6b6b] mt-3">
           <div *ngFor="let msg of getTranscript(selectedLead)">
             <b>{{ msg.role === 'user' || msg.role === 'client' || msg.speaker === 'client' ? '🧑 לקוח' : '👔 סוכן' }}:</b> {{ msg.content || msg.text }}
           </div>
         </div>
-      </div>
+      </details>
 
       <button (click)="closeDetail()" class="w-full text-xs text-[#999] hover:text-[#1a1a1a] mt-5 transition-colors">סגור</button>
     </div>
