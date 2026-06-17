@@ -26,6 +26,11 @@ public class LeadsController(AppDbContext db) : ControllerBase
         return Ok(await db.Leads.Where(l => l.AssignedToId == agentId).OrderByDescending(l => l.CreatedAt).ToListAsync());
     }
 
+    [HttpGet("all-view")]
+    [Authorize(Roles = "agent")]
+    public async Task<IActionResult> GetAllForAgent() =>
+        Ok(await db.Leads.Include(l => l.AssignedTo).OrderByDescending(l => l.CreatedAt).ToListAsync());
+
     [HttpPost]
     [Authorize(Roles = "manager")]
     public async Task<IActionResult> Create(CreateLeadRequest req)

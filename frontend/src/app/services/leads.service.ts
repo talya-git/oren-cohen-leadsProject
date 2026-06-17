@@ -58,6 +58,10 @@ export class LeadsService {
     return this.http.get<Lead[]>(`${this.apiUrl}/leads/my`, { headers: this.headers });
   }
 
+  getAllLeadsForAgent(): Observable<Lead[]> {
+    return this.http.get<Lead[]>(`${this.apiUrl}/leads/all-view`, { headers: this.headers });
+  }
+
   updateLead(id: number, data: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/leads/${id}`, data, { headers: this.headers });
   }

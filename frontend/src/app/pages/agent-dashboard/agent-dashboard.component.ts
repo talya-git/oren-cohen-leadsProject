@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { LeadsService, Lead } from '../../services/leads.service';
+import { LeadsService, Lead, Agent } from '../../services/leads.service';
 
 @Component({
   selector: 'app-agent-dashboard',
@@ -12,11 +12,20 @@ import { LeadsService, Lead } from '../../services/leads.service';
   styleUrl: './agent-dashboard.component.scss'
 })
 export class AgentDashboardComponent implements OnInit {
-  leads: Lead[] = [];
+  myLeads: Lead[] = [];
+  allLeads: Lead[] = [];
+  filteredLeads: Lead[] = [];
+  agents: Agent[] = [];
   selectedLead: Lead | null = null;
   showCallForm = false;
   newCallTitle = '';
   newCallSummary = '';
+  activeTab: 'my' | 'all' = 'my';
+
+  // Filters
+  filterAgent = '';
+  filterArea = '';
+  filterProject = '';
 
   propertyTypes = ['דירה', 'פנטהאוז', 'דירת גן', 'בית פרטי', 'וילה', 'דופלקס', 'סטודיו'];
   allAmenities = ['מרפסת', 'מחסן', 'חניה', 'ממד', 'מעלית', 'גישה לנכים', 'נוף'];
@@ -26,10 +35,46 @@ export class AgentDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadLeads();
+    this.leadsService.getAgents().subscribe(a => this.agents = a);
   }
 
   loadLeads(): void {
-    this.leadsService.getMyLeads().subscribe(leads => this.leads = leads);
+    this.leadsService.getMyLeads().subscribe(leads => this.myLeads = leads);
+    this.leadsService.getAllLeadsForAgent().subscribe(leads => {
+      this.allLeads = leads;
+      this.applyFilters();
+    });
+  }
+
+  switchTab(tab: 'my' | 'all'): void {
+    this.activeTab = tab;
+    this.applyFilters();
+  }
+
+  applyFilters(): void {
+    let leads = this.activeTab === 'my' ? this.myLeads : this.allLeads;
+
+    if (this.filterAgent) {
+      leads = leads.filter(l => l.assignedTo?.name === this.filterAgent);
+    }
+    if (this.filterArea) {
+      leads = leads.filter(l => l.area?.includes(this.filterArea));
+    }
+    if (this.filterProject) {
+      leads = leads.filter(l => l.referralProject === this.filterProject);
+    }
+
+    this.filteredLeads = leads;
+  }
+
+  get uniqueAreas(): string[] {
+    const areas = this.allLeads.map(l => l.area).filter(a => !!a) as string[];
+    return [...new Set(areas)];
+  }
+
+  get uniqueProjects(): string[] {
+    const projects = this.allLeads.map(l => l.referralProject).filter(p => !!p) as string[];
+    return [...new Set(projects)];
   }
 
   openDetail(lead: Lead): void { this.selectedLead = lead; }
@@ -99,8 +144,8 @@ export class AgentDashboardComponent implements OnInit {
       this.showCallForm = false;
       this.newCallTitle = '';
       this.newCallSummary = '';
-      this.leadsService.getMyLeads().subscribe(leads => {
-        this.leads = leads;
+      this.loadLeads();
+      this.leadsService.getAllLeadsForAgent().subscribe(leads => {
         this.selectedLead = leads.find(l => l.id === this.selectedLead!.id) || null;
       });
     });

@@ -4,18 +4,47 @@
     <div class="flex items-center gap-4">
       <img src="assets/logo.png" alt="" class="w-10 h-10 rounded-full" />
       <div>
-        <h1 class="font-serif text-base font-medium text-[#1a1a1a] tracking-wide">הלידים שלי</h1>
+        <h1 class="font-serif text-base font-medium text-[#1a1a1a] tracking-wide">ניהול לידים</h1>
         <span class="text-[11px] text-[#c9a96e] font-medium">{{ auth.currentUser?.name }}</span>
       </div>
     </div>
     <div class="flex items-center gap-4">
-      <span class="text-[11px] text-[#c9a96e] border border-[#c9a96e]/30 px-3 py-1 rounded-full font-medium">{{ leads.length }} לידים</span>
+      <span class="text-[11px] text-[#c9a96e] border border-[#c9a96e]/30 px-3 py-1 rounded-full font-medium">{{ filteredLeads.length }} לידים</span>
       <button (click)="logout()" class="text-xs text-[#999] hover:text-[#c9a96e] transition-colors">התנתק</button>
     </div>
   </header>
 
-  <div class="px-6 lg:px-10 py-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" *ngIf="leads.length; else noLeads">
-    <div *ngFor="let lead of leads" (click)="openDetail(lead)"
+  <!-- Tabs -->
+  <div class="px-6 lg:px-10 py-4 flex flex-wrap gap-2 border-b border-[#ece7df] bg-white/50">
+    <button (click)="switchTab('my')" class="text-xs px-4 py-1.5 rounded-full border font-medium transition-all duration-200"
+            [class]="activeTab==='my' ? 'bg-[#c9a96e] text-white border-[#c9a96e]' : 'border-[#ece7df] text-[#999] hover:border-[#c9a96e]/40'">
+      הלידים שלי
+    </button>
+    <button (click)="switchTab('all')" class="text-xs px-4 py-1.5 rounded-full border font-medium transition-all duration-200"
+            [class]="activeTab==='all' ? 'bg-[#c9a96e] text-white border-[#c9a96e]' : 'border-[#ece7df] text-[#999] hover:border-[#c9a96e]/40'">
+      כל הלידים
+    </button>
+  </div>
+
+  <!-- Filters (only in "all" tab) -->
+  <div *ngIf="activeTab==='all'" class="px-6 lg:px-10 py-3 flex flex-wrap gap-3 border-b border-[#ece7df] bg-white/30">
+    <select [(ngModel)]="filterAgent" (change)="applyFilters()" class="text-xs border border-[#ece7df] rounded-lg px-3 py-1.5 bg-white outline-none text-[#4a4a4a] cursor-pointer">
+      <option value="">כל הסוכנים</option>
+      <option *ngFor="let agent of agents" [value]="agent.name">{{ agent.name }}</option>
+    </select>
+    <select [(ngModel)]="filterArea" (change)="applyFilters()" class="text-xs border border-[#ece7df] rounded-lg px-3 py-1.5 bg-white outline-none text-[#4a4a4a] cursor-pointer">
+      <option value="">כל האזורים</option>
+      <option *ngFor="let area of uniqueAreas" [value]="area">{{ area }}</option>
+    </select>
+    <select [(ngModel)]="filterProject" (change)="applyFilters()" class="text-xs border border-[#ece7df] rounded-lg px-3 py-1.5 bg-white outline-none text-[#4a4a4a] cursor-pointer">
+      <option value="">כל הפרויקטים</option>
+      <option *ngFor="let proj of uniqueProjects" [value]="proj">{{ proj }}</option>
+    </select>
+  </div>
+
+  <!-- Grid -->
+  <div class="px-6 lg:px-10 py-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" *ngIf="filteredLeads.length; else noLeads">
+    <div *ngFor="let lead of filteredLeads" (click)="openDetail(lead)"
          class="bg-white rounded-xl p-5 cursor-pointer border border-[#ece7df] hover:border-[#c9a96e]/40 hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300">
       <div class="flex items-center justify-between mb-3">
         <span class="text-sm font-semibold text-[#1a1a1a]">{{ lead.contactName || 'ללא שם' }}</span>
@@ -32,126 +61,54 @@
       </div>
       <div class="flex items-center justify-between mt-4 pt-3 border-t border-[#f0ebe3]">
         <span class="text-[10px] text-[#b5ad9f]">{{ lead.createdAt | date:'dd/MM HH:mm' }}</span>
+        <span *ngIf="lead.assignedTo?.name" class="text-[10px] bg-[#c9a96e]/10 text-[#c9a96e] border border-[#c9a96e]/30 px-2.5 py-0.5 rounded-full font-semibold">👤 {{ lead.assignedTo?.name }}</span>
+        <span *ngIf="!lead.assignedTo?.name" class="text-[10px] bg-gray-50 text-[#ccc] border border-gray-200 px-2.5 py-0.5 rounded-full">לא שויך</span>
       </div>
     </div>
   </div>
 
   <ng-template #noLeads>
-    <p class="text-center text-[#b5ad9f] py-24 text-sm">אין לידים ששויכו אליך עדיין</p>
+    <p class="text-center text-[#b5ad9f] py-24 text-sm">{{ activeTab === 'my' ? 'אין לידים ששויכו אליך עדיין' : 'אין לידים' }}</p>
   </ng-template>
 
   <!-- Detail Modal -->
   <div *ngIf="selectedLead" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4" (click)="closeDetail()">
     <div class="bg-white rounded-2xl p-7 w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl border border-[#ece7df]" (click)="$event.stopPropagation()">
       
-      <!-- Header -->
       <div class="flex items-center justify-between mb-5 pb-4 border-b border-[#f0ebe3]">
         <div class="flex-1">
-          <input type="text" [value]="selectedLead?.contactName || ''" (change)="updateField('contactName', $event)" class="font-serif text-lg font-medium text-[#1a1a1a] bg-transparent outline-none w-full" placeholder="שם הלקוח" />
+          <input type="text" [value]="selectedLead.contactName || ''" (change)="updateField('contactName', $event)" class="font-serif text-lg font-medium text-[#1a1a1a] bg-transparent outline-none w-full" placeholder="שם הלקוח" />
+          <span *ngIf="selectedLead.assignedTo?.name" class="inline-block mt-1 text-[10px] bg-[#c9a96e]/10 text-[#c9a96e] border border-[#c9a96e]/30 px-2.5 py-0.5 rounded-full font-semibold">👤 משויך ל: {{ selectedLead.assignedTo?.name }}</span>
         </div>
         <div>
-          <input type="text" [value]="selectedLead?.phone || ''" (change)="updateField('phone', $event)" class="text-[#c9a96e] text-sm font-medium bg-transparent outline-none text-left w-36" placeholder="טלפון" />
+          <input type="text" [value]="selectedLead.phone || ''" (change)="updateField('phone', $event)" class="text-[#c9a96e] text-sm font-medium bg-transparent outline-none text-left w-36" placeholder="טלפון" />
         </div>
       </div>
 
-      <!-- Fields Grid -->
       <div class="grid grid-cols-2 gap-3 mb-5">
         <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
           <label class="text-[#c9a96e] font-medium block mb-1">אזור</label>
-          <input type="text" [value]="selectedLead?.area || ''" (change)="updateField('area', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="לא צוין" />
+          <input type="text" [value]="selectedLead.area || ''" (change)="updateField('area', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="לא צוין" />
         </div>
         <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
           <label class="text-[#c9a96e] font-medium block mb-1">חדרים</label>
-          <input type="text" [value]="selectedLead?.rooms || ''" (change)="updateField('rooms', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="לא צוין" />
+          <input type="text" [value]="selectedLead.rooms || ''" (change)="updateField('rooms', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="לא צוין" />
         </div>
         <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
           <label class="text-[#c9a96e] font-medium block mb-1">תקציב</label>
-          <input type="text" [value]="selectedLead?.budget || ''" (change)="updateField('budget', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="לא צוין" />
+          <input type="text" [value]="selectedLead.budget || ''" (change)="updateField('budget', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="לא צוין" />
         </div>
         <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
           <label class="text-[#c9a96e] font-medium block mb-1">סוג</label>
-          <input type="text" [value]="selectedLead?.intent || ''" (change)="updateField('intent', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="קניה/שכירות/השקעה" />
-        </div>
-        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
-          <label class="text-[#c9a96e] font-medium block mb-1">קומה</label>
-          <input type="text" [value]="selectedLead?.floor || ''" (change)="updateField('floor', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="לא צוין" />
-        </div>
-        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
-          <label class="text-[#c9a96e] font-medium block mb-1">מימון</label>
-          <input type="text" [value]="selectedLead?.financing || ''" (change)="updateField('financing', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="הון עצמי/משכנתא" />
-        </div>
-        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
-          <label class="text-[#c9a96e] font-medium block mb-1">תזמון</label>
-          <input type="text" [value]="selectedLead?.timeline || ''" (change)="updateField('timeline', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="לא צוין" />
-        </div>
-        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
-          <label class="text-[#c9a96e] font-medium block mb-1">מייל</label>
-          <input type="email" [value]="selectedLead?.email || ''" (change)="updateField('email', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="לא צוין" />
-        </div>
-        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
-          <label class="text-[#c9a96e] font-medium block mb-1">מקור הגעה</label>
-          <select [value]="selectedLead?.source || ''" (change)="updateField('source', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs cursor-pointer">
-            <option value="">לא צוין</option>
-            <option value="פייסבוק">פייסבוק</option>
-            <option value="גוגל">גוגל</option>
-            <option value="יד 2">יד 2</option>
-            <option value="אתר">אתר</option>
-            <option value="המלצה">המלצה</option>
-            <option value="טלפון">טלפון</option>
-            <option value="אחר">אחר</option>
-          </select>
+          <input type="text" [value]="selectedLead.intent || ''" (change)="updateField('intent', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="קניה/שכירות/השקעה" />
         </div>
         <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
           <label class="text-[#c9a96e] font-medium block mb-1">הערות</label>
-          <input type="text" [value]="selectedLead?.notes || ''" (change)="updateField('notes', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="הוסף הערה..." />
+          <input type="text" [value]="selectedLead.notes || ''" (change)="updateField('notes', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="הוסף הערה..." />
         </div>
-      </div>
-
-      <!-- סוג נכס -->
-      <div class="mb-4">
-        <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold block mb-2">סוג נכס</span>
-        <div class="flex flex-wrap gap-2">
-          <button *ngFor="let type of propertyTypes" (click)="updateProperty('propertyType', type)"
-                  class="text-[11px] px-3 py-1.5 rounded-full border transition-all cursor-pointer"
-                  [class]="selectedLead?.propertyType === type ? 'bg-[#c9a96e] text-white border-[#c9a96e]' : 'bg-white border-[#ece7df] text-[#6b6b6b] hover:border-[#c9a96e]'">
-            {{ type }}
-          </button>
-        </div>
-      </div>
-
-      <!-- תוספות -->
-      <div class="mb-4">
-        <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold block mb-2">תוספות</span>
-        <div class="flex flex-wrap gap-2">
-          <label *ngFor="let amenity of allAmenities" class="flex items-center gap-1.5 text-[11px] bg-white border border-[#ece7df] px-3 py-1.5 rounded-full cursor-pointer hover:border-[#c9a96e] transition-all"
-                 [class.bg-[#c9a96e]]="isAmenitySelected(amenity)" [class.text-white]="isAmenitySelected(amenity)" [class.border-[#c9a96e]]="isAmenitySelected(amenity)">
-            <input type="checkbox" [checked]="isAmenitySelected(amenity)" (change)="toggleAmenity(amenity)" class="hidden" />
-            {{ amenity }}
-          </label>
-        </div>
-      </div>
-
-      <!-- כיווני אוויר -->
-      <div class="mb-4">
-        <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold block mb-2">כיווני אוויר</span>
-        <div class="flex gap-2">
-          <button *ngFor="let n of [1,2,3,4]" (click)="updateProperty('airDirections', n)"
-                  class="w-10 h-10 rounded-lg border text-sm font-semibold transition-all cursor-pointer"
-                  [class]="selectedLead?.airDirections === n ? 'bg-[#c9a96e] text-white border-[#c9a96e]' : 'bg-white border-[#ece7df] text-[#6b6b6b] hover:border-[#c9a96e]'">
-            {{ n }}
-          </button>
-        </div>
-      </div>
-
-      <!-- קרבה ל -->
-      <div class="mb-5">
-        <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold block mb-2">קרבה ל</span>
-        <div class="flex flex-wrap gap-2">
-          <label *ngFor="let place of allNearBy" class="flex items-center gap-1.5 text-[11px] bg-white border border-[#ece7df] px-3 py-1.5 rounded-full cursor-pointer hover:border-[#c9a96e] transition-all"
-                 [class.bg-[#c9a96e]]="isNearBySelected(place)" [class.text-white]="isNearBySelected(place)" [class.border-[#c9a96e]]="isNearBySelected(place)">
-            <input type="checkbox" [checked]="isNearBySelected(place)" (change)="toggleNearBy(place)" class="hidden" />
-            {{ place }}
-          </label>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">מקור הגעה</label>
+          <span class="text-[#1a1a1a]">{{ selectedLead.source || 'לא צוין' }}</span>
         </div>
       </div>
 
@@ -184,7 +141,7 @@
         <p *ngIf="!getPhoneCalls(selectedLead).length && !showCallForm" class="text-[11px] text-[#ccc]">אין שיחות טלפוניות עדיין</p>
       </div>
 
-      <!-- תמליל שיחה (נפתח) -->
+      <!-- תמליל -->
       <details *ngIf="getTranscript(selectedLead).length" class="border-t border-[#f0ebe3] pt-4 mt-4">
         <summary class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold cursor-pointer hover:text-[#b08d4f]">תמליל שיחה עם בוט ▾</summary>
         <div class="space-y-2 max-h-48 overflow-y-auto text-xs text-[#6b6b6b] mt-3">
