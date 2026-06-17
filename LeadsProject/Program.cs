@@ -7,8 +7,15 @@ using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<AppDbContext>(opt =>
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+var connStr = builder.Configuration.GetConnectionString("DefaultConnection")!;
+if (connStr.Contains("Host=") || connStr.Contains("postgres"))
+{
+    builder.Services.AddDbContext<AppDbContext>(opt => opt.UseNpgsql(connStr));
+}
+else
+{
+    builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(connStr));
+}
 
 builder.Services.AddScoped<JwtService>();
 
