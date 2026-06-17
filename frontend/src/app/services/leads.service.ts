@@ -82,4 +82,12 @@ export class LeadsService {
   getAgents(): Observable<Agent[]> {
     return this.http.get<Agent[]>(`${this.apiUrl}/agents`, { headers: this.headers });
   }
+
+  getProjects(): Observable<{ id: number; name: string }[]> {
+    return this.http.get<{ id: number; name: string }[]>(`${this.apiUrl}/projects`, { headers: this.headers });
+  }
+
+  addProject(name: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/projects`, { name }, { headers: this.headers });
+  }
 }

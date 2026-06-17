@@ -26,15 +26,7 @@ export class ManagerDashboardComponent implements OnInit {
   allAmenities = ['מרפסת', 'מחסן', 'חניה', 'ממד', 'מעלית', 'גישה לנכים', 'נוף'];
   allNearBy = ['בית כנסת', 'סופרים'];
   newProjectName = '';
-  projectsList = [
-    'שמואל הנגיד-רזדנס', 'עדן', 'יפו 184', 'השלושה',
-    'Oren Cohen יד 2', 'ניתאי הארבלי',
-    'סוקולוב 6 - טלביה פארק', 'ספקים',
-    'קרן היסוד 15 - בן דוד', 'מאיר שחם - בן דוד',
-    'לינקולן - בן דוד', 'אינדפנדנס - מאיר שחם 3-1',
-    'נוף הנגיד - שמואל הנגיד 15',
-    'תיבת האוצרות', 'בית הערבה'
-  ];
+  projectsList: string[] = [];
   allObjections = [
     // כספי
     'כספי', 'לא בתקציב', 'מחיר', 'תנאי תשלום', 'מדד תשומות הבניה',
@@ -73,6 +65,11 @@ export class ManagerDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.loadLeads();
     this.leadsService.getAgents().subscribe(a => this.agents = a);
+    this.loadProjects();
+  }
+
+  loadProjects(): void {
+    this.leadsService.getProjects().subscribe(p => this.projectsList = p.map(x => x.name));
   }
 
   loadLeads(): void {
@@ -251,11 +248,11 @@ export class ManagerDashboardComponent implements OnInit {
 
   addProject(): void {
     if (!this.newProjectName.trim()) return;
-    if (!this.projectsList.includes(this.newProjectName.trim())) {
-      this.projectsList.push(this.newProjectName.trim());
-    }
-    this.updateProperty('interestedInProject', this.newProjectName.trim());
-    this.newProjectName = '';
+    this.leadsService.addProject(this.newProjectName.trim()).subscribe(() => {
+      this.loadProjects();
+      this.updateProperty('interestedInProject', this.newProjectName.trim());
+      this.newProjectName = '';
+    });
   }
 
   logout(): void { this.auth.logout(); }

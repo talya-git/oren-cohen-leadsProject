@@ -262,22 +262,7 @@
             <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold block mb-2">הפניה לפרויקט אחר</span>
             <select [value]="selectedLead?.referralProject || ''" (change)="updateProperty('referralProject', $any($event.target).value)" class="w-full bg-white border border-[#ece7df] rounded-lg px-2 py-1.5 outline-none text-[#1a1a1a] text-xs cursor-pointer">
               <option value="">בחר</option>
-              <option value="הפניה לפרויקט אחר">הפניה לפרויקט אחר</option>
-              <option value="Oren Cohen יד 2">Oren Cohen יד 2</option>
-              <option value="השלושה">השלושה</option>
-              <option value="יפו 184">יפו 184</option>
-              <option value="עדן">עדן</option>
-              <option value="בית הערבה">בית הערבה</option>
-              <option value="תיבת האוצרות">תיבת האוצרות</option>
-              <option value="נוף הנגיד - שמואל הנגיד 15">נוף הנגיד - שמואל הנגיד 15</option>
-              <option value="אינדפנדנס - מאיר שחם 3-1">אינדפנדנס - מאיר שחם 3-1</option>
-              <option value="לינקולן - בן דוד">לינקולן - בן דוד</option>
-              <option value="מאיר שחם - בן דוד">מאיר שחם - בן דוד</option>
-              <option value="קרן היסוד 15 - בן דוד">קרן היסוד 15 - בן דוד</option>
-              <option value="ספקים">ספקים</option>
-              <option value="סוקולוב 6 - טלביה פארק">סוקולוב 6 - טלביה פארק</option>
-              <option value="סוכנים-עסקאות">סוכנים-עסקאות</option>
-              <option value="ניתאי הארבלי">ניתאי הארבלי</option>
+              <option *ngFor="let proj of projectsList" [value]="proj">{{ proj }}</option>
             </select>
           </div>
         </div>
