@@ -20,6 +20,7 @@ public class Lead
     public string? NearBy { get; set; }        // JSON array: ["בית כנסת","סופרים"]
     public string? Objections { get; set; }     // JSON array: ["כספי","מחיר",...]
     public string? ReferralProject { get; set; } // הפניה לפרויקט אחר
+    public string? InterestedInProject { get; set; } // מתעניין בפרויקט
     public string Rating { get; set; } = "none";
     public string Status { get; set; } = "new";
     public int? AssignedToId { get; set; }

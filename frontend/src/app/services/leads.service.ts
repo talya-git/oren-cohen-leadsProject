@@ -23,6 +23,7 @@ export interface Lead {
   nearBy: string;
   objections: string;
   referralProject: string;
+  interestedInProject: string;
   rating: string;
   status: string;
   assignedToId: number | null;

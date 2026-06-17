@@ -42,7 +42,8 @@ public class LeadsController(AppDbContext db) : ControllerBase
             Area = req.Area, Rooms = req.Rooms, PropertyType = req.PropertyType,
             Floor = req.Floor, Financing = req.Financing, Timeline = req.Timeline,
             Intent = req.Intent, Amenities = req.Amenities, AirDirections = req.AirDirections,
-            NearBy = req.NearBy, Transcript = req.Transcript
+            NearBy = req.NearBy, Objections = req.Objections, ReferralProject = req.ReferralProject,
+            InterestedInProject = req.InterestedInProject, Transcript = req.Transcript
         };
         db.Leads.Add(lead);
         await db.SaveChangesAsync();
@@ -75,6 +76,7 @@ public class LeadsController(AppDbContext db) : ControllerBase
         if (req.NearBy != null) lead.NearBy = req.NearBy;
         if (req.Objections != null) lead.Objections = req.Objections;
         if (req.ReferralProject != null) lead.ReferralProject = req.ReferralProject;
+        if (req.InterestedInProject != null) lead.InterestedInProject = req.InterestedInProject;
         lead.UpdatedAt = DateTime.UtcNow;
 
         await db.SaveChangesAsync();

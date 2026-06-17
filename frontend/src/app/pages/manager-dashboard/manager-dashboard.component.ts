@@ -25,6 +25,16 @@ export class ManagerDashboardComponent implements OnInit {
   propertyTypes = ['דירה', 'פנטהאוז', 'דירת גן', 'בית פרטי', 'וילה', 'דופלקס', 'סטודיו'];
   allAmenities = ['מרפסת', 'מחסן', 'חניה', 'ממד', 'מעלית', 'גישה לנכים', 'נוף'];
   allNearBy = ['בית כנסת', 'סופרים'];
+  newProjectName = '';
+  projectsList = [
+    'שמואל הנגיד-רזדנס', 'עדן', 'יפו 184', 'השלושה',
+    'Oren Cohen יד 2', 'ניתאי הארבלי',
+    'סוקולוב 6 - טלביה פארק', 'ספקים',
+    'קרן היסוד 15 - בן דוד', 'מאיר שחם - בן דוד',
+    'לינקולן - בן דוד', 'אינדפנדנס - מאיר שחם 3-1',
+    'נוף הנגיד - שמואל הנגיד 15',
+    'תיבת האוצרות', 'בית הערבה'
+  ];
   allObjections = [
     // כספי
     'כספי', 'לא בתקציב', 'מחיר', 'תנאי תשלום', 'מדד תשומות הבניה',
@@ -237,6 +247,15 @@ export class ManagerDashboardComponent implements OnInit {
         this.selectedLead = leads.find(l => l.id === this.selectedLead!.id) || null;
       });
     });
+  }
+
+  addProject(): void {
+    if (!this.newProjectName.trim()) return;
+    if (!this.projectsList.includes(this.newProjectName.trim())) {
+      this.projectsList.push(this.newProjectName.trim());
+    }
+    this.updateProperty('interestedInProject', this.newProjectName.trim());
+    this.newProjectName = '';
   }
 
   logout(): void { this.auth.logout(); }

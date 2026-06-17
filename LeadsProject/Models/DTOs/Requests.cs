@@ -25,7 +25,8 @@ public record UpdateLeadRequest(
     int? AirDirections,
     string? NearBy,
     string? Objections,
-    string? ReferralProject
+    string? ReferralProject,
+    string? InterestedInProject
 );
 
 public record CreateLeadRequest(
@@ -46,6 +47,7 @@ public record CreateLeadRequest(
     string? NearBy,
     string? Objections,
     string? ReferralProject,
+    string? InterestedInProject,
     string? Transcript
 );
 
