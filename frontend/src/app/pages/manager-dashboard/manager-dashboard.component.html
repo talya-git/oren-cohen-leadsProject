@@ -56,8 +56,8 @@
 
       <div class="flex items-center justify-between mt-4 pt-3 border-t border-[#f0ebe3]">
         <span class="text-[10px] text-[#b5ad9f]">{{ lead.createdAt | date:'dd/MM HH:mm' }}</span>
-        <span *ngIf="lead.assignedToName" class="text-[10px] text-[#c9a96e] font-medium">👤 {{ lead.assignedToName }}</span>
-        <span *ngIf="!lead.assignedToName" class="text-[10px] text-[#ccc]">חדש</span>
+        <span *ngIf="lead.assignedToName" class="text-[10px] bg-[#c9a96e]/10 text-[#c9a96e] border border-[#c9a96e]/30 px-2.5 py-0.5 rounded-full font-semibold">👤 {{ lead.assignedToName }}</span>
+        <span *ngIf="!lead.assignedToName" class="text-[10px] bg-gray-50 text-[#ccc] border border-gray-200 px-2.5 py-0.5 rounded-full">לא שויך</span>
       </div>
     </div>
   </div>
@@ -73,6 +73,7 @@
       <div class="flex items-center justify-between mb-5 pb-4 border-b border-[#f0ebe3]">
         <div class="flex-1">
           <input type="text" [value]="selectedLead?.contactName || ''" (change)="updateField('contactName', $event)" class="font-serif text-lg font-medium text-[#1a1a1a] bg-transparent outline-none w-full" placeholder="שם הלקוח" />
+          <span *ngIf="selectedLead?.assignedToName" class="inline-block mt-1 text-[10px] bg-[#c9a96e]/10 text-[#c9a96e] border border-[#c9a96e]/30 px-2.5 py-0.5 rounded-full font-semibold">👤 משויך ל: {{ selectedLead?.assignedToName }}</span>
         </div>
         <div>
           <input type="text" [value]="selectedLead?.phone || ''" (change)="updateField('phone', $event)" class="text-[#c9a96e] text-sm font-medium bg-transparent outline-none text-left w-36" placeholder="טלפון" />
