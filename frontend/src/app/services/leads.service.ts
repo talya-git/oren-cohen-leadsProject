@@ -21,6 +21,8 @@ export interface Lead {
   amenities: string;
   airDirections: number | null;
   nearBy: string;
+  objections: string;
+  referralProject: string;
   rating: string;
   status: string;
   assignedToId: number | null;

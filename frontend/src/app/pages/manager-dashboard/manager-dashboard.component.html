@@ -119,13 +119,56 @@
         <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
           <label class="text-[#c9a96e] font-medium block mb-1">מקור הגעה</label>
           <select [value]="selectedLead?.source || ''" (change)="updateField('source', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs cursor-pointer">
-            <option value="">לא צוין</option>
+            <option value="">בחר</option>
+            <option value="אינסטגרם (שמואל הנגיד-רזדנס)">אינסטגרם (שמואל הנגיד-רזדנס)</option>
+            <option value="דבי גולדפישר (שמואל הנגיד-רזדנס)">דבי גולדפישר (שמואל הנגיד-רזדנס)</option>
+            <option value="דרך ישעיהו שיף (שמואל הנגיד-רזדנס)">דרך ישעיהו שיף (שמואל הנגיד-רזדנס)</option>
+            <option value="ליד אישי של אריה טאו (הנגיד-רזדנס)">ליד אישי של אריה טאו (הנגיד-רזדנס)</option>
+            <option value="לידים ממיאמי (שמואל הנגיד-רזדנס)">לידים ממיאמי (שמואל הנגיד-רזדנס)</option>
+            <option value="גוגל דף נחיתה קמפיין חו״ל (שמואל הנגיד-רזדנס)">גוגל דף נחיתה קמפיין חו״ל (שמואל הנגיד-רזדנס)</option>
+            <option value="אברהמי (שמואל הנגיד-רזדנס)">אברהמי (שמואל הנגיד-רזדנס)</option>
+            <option value="יד 2">יד 2</option>
+            <option value="מדלן">מדלן</option>
+            <option value="משרד מכירות">משרד מכירות</option>
+            <option value="whatsapp">whatsapp</option>
+            <option value="נדלן.קום">נדלן.קום</option>
+            <option value="פניה טלפונית">פניה טלפונית</option>
+            <option value="אתר החברת">אתר החברת</option>
+            <option value="שלט באתר">שלט באתר</option>
             <option value="פייסבוק">פייסבוק</option>
             <option value="גוגל">גוגל</option>
-            <option value="יד 2">יד 2</option>
-            <option value="אתר">אתר</option>
+            <option value="תלי דלת">תלי דלת</option>
+            <option value="פעולות יזומות">פעולות יזומות</option>
+            <option value="אינטרנט - אחר">אינטרנט - אחר</option>
+            <option value="שלטי חוצות">שלטי חוצות</option>
+            <option value="מועדון לקוחות">מועדון לקוחות</option>
+            <option value="מכונים">מכונים</option>
+            <option value="תחבורה ציבורית">תחבורה ציבורית</option>
+            <option value="אתר הפרויקט">אתר הפרויקט</option>
+            <option value="קבוצות פייסבוק">קבוצות פייסבוק</option>
+            <option value="דיוור מייל">דיוור מייל</option>
+            <option value="דיוור סמס">דיוור סמס</option>
+            <option value="דיוור ישיר">דיוור ישיר</option>
+            <option value="עיתונות מקומית">עיתונות מקומית</option>
+            <option value="עיתונות ארצית">עיתונות ארצית</option>
+            <option value="כלכליסט">כלכליסט</option>
+            <option value="גלובס">גלובס</option>
+            <option value="דה מרקר">דה מרקר</option>
+            <option value="רדיו">רדיו</option>
+            <option value="ערוץ 12">ערוץ 12</option>
+            <option value="ערוץ 13">ערוץ 13</option>
+            <option value="הפניה מפרויקט אחר">הפניה מפרויקט אחר</option>
+            <option value="המלצה מלקוח">המלצה מלקוח</option>
             <option value="המלצה">המלצה</option>
-            <option value="טלפון">טלפון</option>
+            <option value="הפניה מהיזם">הפניה מהיזם</option>
+            <option value="הפניה ממתווך">הפניה ממתווך</option>
+            <option value="יחסי ציבור">יחסי ציבור</option>
+            <option value="דיירים קיימים">דיירים קיימים</option>
+            <option value="אירוע">אירוע</option>
+            <option value="מסד נתונים">מסד נתונים</option>
+            <option value="מקור לא ידוע">מקור לא ידוע</option>
+            <option value="דיוור וואטסאפ">דיוור וואטסאפ</option>
+            <option value="הפניה מלקוח">הפניה מלקוח</option>
             <option value="אחר">אחר</option>
           </select>
         </div>
@@ -134,12 +177,65 @@
       <!-- סוג נכס -->
       <div class="mb-4">
         <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold block mb-2">סוג נכס</span>
-        <div class="flex flex-wrap gap-2">
-          <button *ngFor="let type of propertyTypes" (click)="updateProperty('propertyType', type)"
-                  class="text-[11px] px-3 py-1.5 rounded-full border transition-all cursor-pointer"
-                  [class]="selectedLead?.propertyType === type ? 'bg-[#c9a96e] text-white border-[#c9a96e]' : 'bg-white border-[#ece7df] text-[#6b6b6b] hover:border-[#c9a96e]'">
-            {{ type }}
-          </button>
+        <div class="bg-[#f9f6f1] rounded-lg p-3">
+          <select [value]="selectedLead?.propertyType || ''" (change)="updateProperty('propertyType', $any($event.target).value)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs cursor-pointer">
+            <option value="">בחר</option>
+            <option value="דירה">דירה</option>
+            <option value="דירת גן">דירת גן</option>
+            <option value="פנטהאוז">פנטהאוז</option>
+            <option value="מ.פנטהאוז">מ.פנטהאוז</option>
+            <option value="משרד">משרד</option>
+            <option value="מסחר">מסחר</option>
+            <option value="בית פרטי">בית פרטי</option>
+            <option value="וילה">וילה</option>
+            <option value="דו משפחתי">דו משפחתי</option>
+            <option value="מגרש/קרקע">מגרש/קרקע</option>
+            <option value="דירת קרקע">דירת קרקע</option>
+            <option value="דופלקס">דופלקס</option>
+            <option value="לופט">לופט</option>
+            <option value="מרתף">מרתף</option>
+            <option value="דופלקס גן">דופלקס גן</option>
+            <option value="דופלקס גג">דופלקס גג</option>
+            <option value="דופלקס/לופט">דופלקס/לופט</option>
+            <option value="דופלקס/פנטהאוז">דופלקס/פנטהאוז</option>
+            <option value="טריפלקס גן">טריפלקס גן</option>
+            <option value="מפלס אחד">מפלס אחד</option>
+            <option value="קוטג'">קוטג'</option>
+            <option value="רביעייה">רביעייה</option>
+            <option value="שמיניה">שמיניה</option>
+            <option value="משק">משק</option>
+            <option value="משק עזר">משק עזר</option>
+            <option value="מגרש מגורים">מגרש מגורים</option>
+            <option value="תלת משפחתי">תלת משפחתי</option>
+            <option value="דיורית">דיורית</option>
+            <option value="קליניקה">קליניקה</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- הפניה לפרויקט אחר -->
+      <div class="mb-4">
+        <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold block mb-2">הפניה לפרויקט אחר</span>
+        <div class="bg-[#f9f6f1] rounded-lg p-3">
+          <select [value]="selectedLead?.referralProject || ''" (change)="updateProperty('referralProject', $any($event.target).value)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs cursor-pointer">
+            <option value="">בחר</option>
+            <option value="הפניה לפרויקט אחר">הפניה לפרויקט אחר</option>
+            <option value="Oren Cohen יד 2">Oren Cohen יד 2</option>
+            <option value="השלושה">השלושה</option>
+            <option value="יפו 184">יפו 184</option>
+            <option value="עדן">עדן</option>
+            <option value="בית הערבה">בית הערבה</option>
+            <option value="תיבת האוצרות">תיבת האוצרות</option>
+            <option value="נוף הנגיד - שמואל הנגיד 15">נוף הנגיד - שמואל הנגיד 15</option>
+            <option value="אינדפנדנס - מאיר שחם 3-1">אינדפנדנס - מאיר שחם 3-1</option>
+            <option value="לינקולן - בן דוד">לינקולן - בן דוד</option>
+            <option value="מאיר שחם - בן דוד">מאיר שחם - בן דוד</option>
+            <option value="קרן היסוד 15 - בן דוד">קרן היסוד 15 - בן דוד</option>
+            <option value="ספקים">ספקים</option>
+            <option value="סוקולוב 6 - טלביה פארק">סוקולוב 6 - טלביה פארק</option>
+            <option value="סוכנים-עסקאות">סוכנים-עסקאות</option>
+            <option value="ניתאי הארבלי">ניתאי הארבלי</option>
+          </select>
         </div>
       </div>
 
@@ -175,6 +271,17 @@
                  [class.bg-[#c9a96e]]="isNearBySelected(place)" [class.text-white]="isNearBySelected(place)" [class.border-[#c9a96e]]="isNearBySelected(place)">
             <input type="checkbox" [checked]="isNearBySelected(place)" (change)="toggleNearBy(place)" class="hidden" />
             {{ place }}
+          </label>
+        </div>
+      </div>
+
+      <!-- התנגדויות -->
+      <div class="mb-5">
+        <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold block mb-2">התנגדויות</span>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 max-h-40 overflow-y-auto space-y-1">
+          <label *ngFor="let obj of allObjections" class="flex items-center gap-2 text-[11px] text-[#4a4a4a] cursor-pointer hover:text-[#c9a96e] py-0.5">
+            <input type="checkbox" [checked]="isObjectionSelected(obj)" (change)="toggleObjection(obj)" class="accent-[#c9a96e] w-3.5 h-3.5" />
+            {{ obj }}
           </label>
         </div>
       </div>
