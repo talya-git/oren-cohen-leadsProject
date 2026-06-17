@@ -87,10 +87,59 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     if (db.Database.IsNpgsql())
     {
-        // Drop and recreate to ensure schema is correct
-        db.Database.EnsureDeleted();
-        db.Database.EnsureCreated();
-        // Seed users
+        // Create tables if they don't exist using raw SQL
+        db.Database.ExecuteSqlRaw(@"
+            CREATE TABLE IF NOT EXISTS ""Users"" (
+                ""Id"" SERIAL PRIMARY KEY,
+                ""Name"" TEXT NOT NULL,
+                ""PasswordHash"" TEXT,
+                ""Role"" TEXT NOT NULL DEFAULT 'agent',
+                ""CreatedAt"" TIMESTAMP DEFAULT NOW()
+            );
+            CREATE TABLE IF NOT EXISTS ""Leads"" (
+                ""Id"" SERIAL PRIMARY KEY,
+                ""ContactName"" TEXT,
+                ""Phone"" TEXT,
+                ""Email"" TEXT,
+                ""Source"" TEXT,
+                ""Budget"" TEXT,
+                ""Area"" TEXT,
+                ""Rooms"" TEXT,
+                ""PropertyType"" TEXT,
+                ""Floor"" TEXT,
+                ""Financing"" TEXT,
+                ""Timeline"" TEXT,
+                ""Intent"" TEXT,
+                ""Amenities"" TEXT,
+                ""AirDirections"" INTEGER,
+                ""NearBy"" TEXT,
+                ""Objections"" TEXT,
+                ""ReferralProject"" TEXT,
+                ""InterestedInProject"" TEXT,
+                ""Rating"" TEXT NOT NULL DEFAULT 'none',
+                ""Status"" TEXT NOT NULL DEFAULT 'new',
+                ""AssignedToId"" INTEGER REFERENCES ""Users""(""Id""),
+                ""Transcript"" TEXT,
+                ""Notes"" TEXT,
+                ""PhoneCalls"" TEXT,
+                ""CreatedAt"" TIMESTAMP DEFAULT NOW(),
+                ""UpdatedAt"" TIMESTAMP DEFAULT NOW()
+            );
+            CREATE TABLE IF NOT EXISTS ""Projects"" (
+                ""Id"" SERIAL PRIMARY KEY,
+                ""Name"" TEXT NOT NULL,
+                ""CreatedAt"" TIMESTAMP DEFAULT NOW()
+            );
+            CREATE TABLE IF NOT EXISTS ""AmenityOptions"" (
+                ""Id"" SERIAL PRIMARY KEY,
+                ""Name"" TEXT NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS ""NearByOptions"" (
+                ""Id"" SERIAL PRIMARY KEY,
+                ""Name"" TEXT NOT NULL
+            );
+        ");
+        // Seed users if empty
         if (!db.Users.Any())
         {
             db.Users.AddRange(
