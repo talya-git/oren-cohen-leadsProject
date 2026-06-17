@@ -8,7 +8,16 @@ using Microsoft.IdentityModel.Tokens;
 var builder = WebApplication.CreateBuilder(args);
 
 var connStr = builder.Configuration.GetConnectionString("DefaultConnection")!;
-if (connStr.Contains("Host=") || connStr.Contains("postgres"))
+
+// Convert Render's postgres:// URL to Npgsql format
+if (connStr.StartsWith("postgres://") || connStr.StartsWith("postgresql://"))
+{
+    var uri = new Uri(connStr);
+    var userInfo = uri.UserInfo.Split(':');
+    connStr = $"Host={uri.Host};Port={uri.Port};Database={uri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=true";
+}
+
+if (connStr.Contains("Host=") || connStr.Contains("host="))
 {
     builder.Services.AddDbContext<AppDbContext>(opt => opt.UseNpgsql(connStr));
 }
