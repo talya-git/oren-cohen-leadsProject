@@ -26,6 +26,8 @@ export class ManagerDashboardComponent implements OnInit {
   allAmenities = ['מרפסת', 'מחסן', 'חניה', 'ממד', 'מעלית', 'גישה לנכים', 'נוף'];
   allNearBy = ['בית כנסת', 'סופרים'];
   newProjectName = '';
+  newAmenity = '';
+  newNearBy = '';
   projectsList: string[] = [];
   allObjections = [
     // כספי
@@ -244,6 +246,24 @@ export class ManagerDashboardComponent implements OnInit {
         this.selectedLead = leads.find(l => l.id === this.selectedLead!.id) || null;
       });
     });
+  }
+
+  addAmenity(): void {
+    if (!this.newAmenity.trim()) return;
+    if (!this.allAmenities.includes(this.newAmenity.trim())) {
+      this.allAmenities.push(this.newAmenity.trim());
+    }
+    this.toggleAmenity(this.newAmenity.trim());
+    this.newAmenity = '';
+  }
+
+  addNearBy(): void {
+    if (!this.newNearBy.trim()) return;
+    if (!this.allNearBy.includes(this.newNearBy.trim())) {
+      this.allNearBy.push(this.newNearBy.trim());
+    }
+    this.toggleNearBy(this.newNearBy.trim());
+    this.newNearBy = '';
   }
 
   addProject(): void {

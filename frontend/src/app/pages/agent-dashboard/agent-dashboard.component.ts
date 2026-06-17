@@ -20,6 +20,8 @@ export class AgentDashboardComponent implements OnInit {
   showCallForm = false;
   newCallTitle = '';
   newCallSummary = '';
+  newAmenity = '';
+  newNearBy = '';
   activeTab: 'my' | 'all' = 'my';
   currentPage = 1;
   pageSize = 50;
@@ -184,6 +186,24 @@ export class AgentDashboardComponent implements OnInit {
     const current = this.getNearBy(this.selectedLead!);
     const updated = current.includes(place) ? current.filter(n => n !== place) : [...current, place];
     this.updateProperty('nearBy', JSON.stringify(updated));
+  }
+
+  addAmenity(): void {
+    if (!this.newAmenity.trim()) return;
+    if (!this.allAmenities.includes(this.newAmenity.trim())) {
+      this.allAmenities.push(this.newAmenity.trim());
+    }
+    this.toggleAmenity(this.newAmenity.trim());
+    this.newAmenity = '';
+  }
+
+  addNearBy(): void {
+    if (!this.newNearBy.trim()) return;
+    if (!this.allNearBy.includes(this.newNearBy.trim())) {
+      this.allNearBy.push(this.newNearBy.trim());
+    }
+    this.toggleNearBy(this.newNearBy.trim());
+    this.newNearBy = '';
   }
 
   updateProperty(field: string, value: any): void {

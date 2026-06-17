@@ -278,6 +278,10 @@
             {{ amenity }}
           </label>
         </div>
+        <div class="flex gap-2 mt-2">
+          <input type="text" [(ngModel)]="newAmenity" placeholder="הוסף תוספת..." class="flex-1 bg-white border border-[#ece7df] rounded-lg px-2 py-1 text-xs outline-none focus:border-[#c9a96e]" />
+          <button (click)="addAmenity()" class="text-[10px] bg-[#c9a96e] text-white px-2.5 py-1 rounded-lg font-medium">+</button>
+        </div>
       </div>
 
       <!-- כיווני אוויר -->
@@ -301,6 +305,10 @@
             <input type="checkbox" [checked]="isNearBySelected(place)" (change)="toggleNearBy(place)" class="hidden" />
             {{ place }}
           </label>
+        </div>
+        <div class="flex gap-2 mt-2">
+          <input type="text" [(ngModel)]="newNearBy" placeholder="הוסף קרבה ל..." class="flex-1 bg-white border border-[#ece7df] rounded-lg px-2 py-1 text-xs outline-none focus:border-[#c9a96e]" />
+          <button (click)="addNearBy()" class="text-[10px] bg-[#c9a96e] text-white px-2.5 py-1 rounded-lg font-medium">+</button>
         </div>
       </div>
 
