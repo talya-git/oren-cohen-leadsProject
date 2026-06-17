@@ -29,18 +29,18 @@
   <div class="px-6 lg:px-10 py-4" *ngIf="filteredLeads.length; else noLeads">
     <div class="bg-white rounded-xl border border-[#ece7df] overflow-hidden">
       <div class="overflow-x-auto">
-        <table class="w-full text-xs table-fixed">
+        <table class="w-full text-xs">
           <thead class="bg-[#f9f6f1] border-b border-[#ece7df]">
             <tr class="text-[#c9a96e] font-semibold text-[10px] uppercase tracking-wider">
-              <th class="px-2 py-3 text-right w-[12%]">שם</th>
-              <th class="px-2 py-3 text-right w-[10%]">טלפון</th>
-              <th class="px-2 py-3 text-right w-[12%]">אזור</th>
-              <th class="px-2 py-3 text-right w-[10%]">תקציב</th>
-              <th class="px-2 py-3 text-right w-[5%]">חדרים</th>
-              <th class="px-2 py-3 text-right w-[8%]">דירוג</th>
-              <th class="px-2 py-3 text-right w-[16%]">מתעניין בפרויקט</th>
-              <th class="px-2 py-3 text-right w-[8%]">משויך ל</th>
-              <th class="px-2 py-3 text-right w-[6%]">תאריך</th>
+              <th class="px-2 py-3 text-right whitespace-nowrap">שם</th>
+              <th class="px-2 py-3 text-right whitespace-nowrap">טלפון</th>
+              <th class="px-2 py-3 text-right whitespace-nowrap">אזור</th>
+              <th class="px-2 py-3 text-right whitespace-nowrap">תקציב</th>
+              <th class="px-2 py-3 text-right whitespace-nowrap">חדרים</th>
+              <th class="px-2 py-3 text-right whitespace-nowrap">דירוג</th>
+              <th class="px-2 py-3 text-right whitespace-nowrap">מתעניין בפרויקט</th>
+              <th class="px-2 py-3 text-right whitespace-nowrap">משויך ל</th>
+              <th class="px-2 py-3 text-right whitespace-nowrap">תאריך</th>
             </tr>
           </thead>
           <tbody>
@@ -50,10 +50,10 @@
                 [class.border-r-emerald-400]="lead.rating==='hot'"
                 [class.border-r-amber-400]="lead.rating==='warm'"
                 [class.border-r-red-400]="lead.rating==='cold'">
-              <td class="px-2 py-2.5 font-medium text-[#1a1a1a] truncate">{{ lead.contactName || 'ללא שם' }}</td>
-              <td class="px-2 py-2.5 text-[#6b6b6b] truncate" dir="ltr">{{ lead.phone || '—' }}</td>
-              <td class="px-2 py-2.5 text-[#6b6b6b] truncate">{{ lead.area || '—' }}</td>
-              <td class="px-2 py-2.5 text-[#6b6b6b] truncate">{{ lead.budget || '—' }}</td>
+              <td class="px-2 py-2.5 font-medium text-[#1a1a1a] whitespace-nowrap">{{ lead.contactName || 'ללא שם' }}</td>
+              <td class="px-2 py-2.5 text-[#6b6b6b] whitespace-nowrap" dir="ltr">{{ lead.phone || '—' }}</td>
+              <td class="px-2 py-2.5 text-[#6b6b6b] whitespace-nowrap">{{ lead.area || '—' }}</td>
+              <td class="px-2 py-2.5 text-[#6b6b6b] whitespace-nowrap">{{ lead.budget || '—' }}</td>
               <td class="px-2 py-2.5 text-[#6b6b6b]">{{ lead.rooms || '—' }}</td>
               <td class="px-3 py-2.5">
                 <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full"
@@ -66,8 +66,8 @@
                   {{ lead.rating === 'hot' ? '🟢 חם' : lead.rating === 'warm' ? '🟠 בינוני' : lead.rating === 'cold' ? '🔴 קר' : '—' }}
                 </span>
               </td>
-              <td class="px-2 py-2.5 text-[10px] text-[#6b6b6b] truncate">{{ lead.interestedInProject || '—' }}</td>
-              <td class="px-2 py-2.5">
+              <td class="px-2 py-2.5 text-[10px] text-[#6b6b6b] whitespace-nowrap">{{ lead.interestedInProject || '—' }}</td>
+              <td class="px-2 py-2.5 whitespace-nowrap">
                 <span *ngIf="lead.assignedTo?.name" class="text-[10px] text-[#c9a96e] font-medium">{{ lead.assignedTo?.name }}</span>
                 <span *ngIf="!lead.assignedTo?.name" class="text-[10px] text-[#ccc]">—</span>
               </td>
