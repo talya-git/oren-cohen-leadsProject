@@ -21,6 +21,8 @@ export class AgentDashboardComponent implements OnInit {
   newCallTitle = '';
   newCallSummary = '';
   activeTab: 'my' | 'all' = 'my';
+  currentPage = 1;
+  pageSize = 50;
 
   // Filters
   filterAgent = '';
@@ -49,6 +51,7 @@ export class AgentDashboardComponent implements OnInit {
 
   switchTab(tab: 'my' | 'all'): void {
     this.activeTab = tab;
+    this.currentPage = 1;
     this.applyFilters();
   }
 
@@ -78,6 +81,28 @@ export class AgentDashboardComponent implements OnInit {
     }
 
     this.filteredLeads = leads;
+    this.currentPage = 1;
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.filteredLeads.length / this.pageSize) || 1;
+  }
+
+  get paginatedLeads(): Lead[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.filteredLeads.slice(start, start + this.pageSize);
+  }
+
+  get visiblePages(): number[] {
+    const pages: number[] = [];
+    const start = Math.max(1, this.currentPage - 2);
+    const end = Math.min(this.totalPages, this.currentPage + 2);
+    for (let i = start; i <= end; i++) pages.push(i);
+    return pages;
+  }
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) this.currentPage = page;
   }
 
   get uniqueAreas(): string[] {

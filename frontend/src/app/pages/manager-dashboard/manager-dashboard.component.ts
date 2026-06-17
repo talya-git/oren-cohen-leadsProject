@@ -19,6 +19,8 @@ export class ManagerDashboardComponent implements OnInit {
   selectedLead: Lead | null = null;
   showAssignModal = false;
   showDetailModal = false;
+  currentPage = 1;
+  pageSize = 50;
 
   propertyTypes = ['דירה', 'פנטהאוז', 'דירת גן', 'בית פרטי', 'וילה', 'דופלקס', 'סטודיו'];
   allAmenities = ['מרפסת', 'מחסן', 'חניה', 'ממד', 'מעלית', 'גישה לנכים', 'נוף'];
@@ -80,6 +82,28 @@ export class ManagerDashboardComponent implements OnInit {
     else if (this.currentFilter === 'new') this.filteredLeads = this.leads.filter(l => l.status === 'new');
     else if (this.currentFilter === 'assigned') this.filteredLeads = this.leads.filter(l => l.status === 'assigned');
     else this.filteredLeads = this.leads.filter(l => l.rating === this.currentFilter);
+    this.currentPage = 1;
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.filteredLeads.length / this.pageSize) || 1;
+  }
+
+  get paginatedLeads(): Lead[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.filteredLeads.slice(start, start + this.pageSize);
+  }
+
+  get visiblePages(): number[] {
+    const pages: number[] = [];
+    const start = Math.max(1, this.currentPage - 2);
+    const end = Math.min(this.totalPages, this.currentPage + 2);
+    for (let i = start; i <= end; i++) pages.push(i);
+    return pages;
+  }
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) this.currentPage = page;
   }
 
   openDetail(lead: Lead): void {

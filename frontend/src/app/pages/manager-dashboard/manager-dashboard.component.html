@@ -25,39 +25,67 @@
     <button (click)="filter('assigned')" [class.active]="currentFilter==='assigned'" class="text-xs px-4 py-1.5 rounded-full border border-[#ece7df] text-[#999] font-medium transition-all duration-200 hover:border-[#c9a96e]/40 hover:text-[#6b6b6b]">שויך</button>
   </div>
 
-  <!-- Grid -->
-  <div class="px-6 lg:px-10 py-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" *ngIf="filteredLeads.length; else noLeads">
-    <div *ngFor="let lead of filteredLeads" (click)="openDetail(lead)"
-         class="bg-white rounded-xl p-5 cursor-pointer border border-[#ece7df] hover:border-[#c9a96e]/40 hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300"
-         [class.border-l-[3px]]="lead.rating!=='none'"
-         [class.border-l-red-400]="lead.rating==='hot'"
-         [class.border-l-amber-400]="lead.rating==='warm'"
-         [class.border-l-emerald-400]="lead.rating==='cold'">
-      
-      <div class="flex items-center justify-between mb-3">
-        <span class="text-sm font-semibold text-[#1a1a1a]">{{ lead.contactName || 'ללא שם' }}</span>
-        <span class="text-[10px] font-semibold px-2.5 py-0.5 rounded-full"
-              [ngClass]="{
-                'bg-red-50 text-red-500 border border-red-100': lead.rating==='hot',
-                'bg-amber-50 text-amber-600 border border-amber-100': lead.rating==='warm',
-                'bg-emerald-50 text-emerald-600 border border-emerald-100': lead.rating==='cold',
-                'bg-gray-50 text-gray-400 border border-gray-100': lead.rating==='none'
-              }">
-          {{ lead.rating === 'hot' ? '🔴 חם' : lead.rating === 'warm' ? '🟠 בינוני' : lead.rating === 'cold' ? '🟢 קר' : '—' }}
-        </span>
+  <!-- Table -->
+  <div class="px-6 lg:px-10 py-4" *ngIf="filteredLeads.length; else noLeads">
+    <div class="bg-white rounded-xl border border-[#ece7df] overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs">
+          <thead class="bg-[#f9f6f1] border-b border-[#ece7df]">
+            <tr class="text-[#c9a96e] font-semibold text-[10px] uppercase tracking-wider">
+              <th class="px-3 py-3 text-right">שם</th>
+              <th class="px-3 py-3 text-right">טלפון</th>
+              <th class="px-3 py-3 text-right">אזור</th>
+              <th class="px-3 py-3 text-right">תקציב</th>
+              <th class="px-3 py-3 text-right">חדרים</th>
+              <th class="px-3 py-3 text-right">דירוג</th>
+              <th class="px-3 py-3 text-right">משויך ל</th>
+              <th class="px-3 py-3 text-right">תאריך</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let lead of paginatedLeads" (click)="openDetail(lead)"
+                class="border-b border-[#f0ebe3] hover:bg-[#f9f6f1] cursor-pointer transition-colors"
+                [class.border-r-[3px]]="lead.rating!=='none'"
+                [class.border-r-red-400]="lead.rating==='hot'"
+                [class.border-r-amber-400]="lead.rating==='warm'"
+                [class.border-r-emerald-400]="lead.rating==='cold'">
+              <td class="px-3 py-2.5 font-medium text-[#1a1a1a]">{{ lead.contactName || 'ללא שם' }}</td>
+              <td class="px-3 py-2.5 text-[#6b6b6b]" dir="ltr">{{ lead.phone || '—' }}</td>
+              <td class="px-3 py-2.5 text-[#6b6b6b]">{{ lead.area || '—' }}</td>
+              <td class="px-3 py-2.5 text-[#6b6b6b]">{{ lead.budget || '—' }}</td>
+              <td class="px-3 py-2.5 text-[#6b6b6b]">{{ lead.rooms || '—' }}</td>
+              <td class="px-3 py-2.5">
+                <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full"
+                      [ngClass]="{
+                        'bg-red-50 text-red-500': lead.rating==='hot',
+                        'bg-amber-50 text-amber-600': lead.rating==='warm',
+                        'bg-emerald-50 text-emerald-600': lead.rating==='cold',
+                        'bg-gray-50 text-gray-400': lead.rating==='none'
+                      }">
+                  {{ lead.rating === 'hot' ? '🔴' : lead.rating === 'warm' ? '🟠' : lead.rating === 'cold' ? '🟢' : '—' }}
+                </span>
+              </td>
+              <td class="px-3 py-2.5">
+                <span *ngIf="lead.assignedTo?.name" class="text-[10px] text-[#c9a96e] font-medium">{{ lead.assignedTo?.name }}</span>
+                <span *ngIf="!lead.assignedTo?.name" class="text-[10px] text-[#ccc]">—</span>
+              </td>
+              <td class="px-3 py-2.5 text-[#b5ad9f] text-[10px]">{{ lead.createdAt | date:'dd/MM' }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      <div class="space-y-1.5 text-xs text-[#6b6b6b]">
-        <div *ngIf="lead.phone">📱 {{ lead.phone }}</div>
-        <div *ngIf="lead.area">📍 {{ lead.area }}</div>
-        <div *ngIf="lead.rooms">🏠 {{ lead.rooms }} חדרים</div>
-        <div *ngIf="lead.budget">💰 {{ lead.budget }}</div>
-      </div>
-
-      <div class="flex items-center justify-between mt-4 pt-3 border-t border-[#f0ebe3]">
-        <span class="text-[10px] text-[#b5ad9f]">{{ lead.createdAt | date:'dd/MM HH:mm' }}</span>
-        <span *ngIf="lead.assignedTo?.name" class="text-[10px] bg-[#c9a96e]/10 text-[#c9a96e] border border-[#c9a96e]/30 px-2.5 py-0.5 rounded-full font-semibold">👤 {{ lead.assignedTo?.name }}</span>
-        <span *ngIf="!lead.assignedTo?.name" class="text-[10px] bg-gray-50 text-[#ccc] border border-gray-200 px-2.5 py-0.5 rounded-full">לא שויך</span>
+      <!-- Pagination -->
+      <div class="flex items-center justify-between px-4 py-3 border-t border-[#ece7df] bg-[#f9f6f1]">
+        <span class="text-[11px] text-[#999]">{{ filteredLeads.length }} לידים | עמוד {{ currentPage }} מתוך {{ totalPages }}</span>
+        <div class="flex gap-1">
+          <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1" class="px-3 py-1 text-xs border border-[#ece7df] rounded-lg hover:border-[#c9a96e] disabled:opacity-30 disabled:cursor-not-allowed">←</button>
+          <button *ngFor="let p of visiblePages" (click)="goToPage(p)" class="px-3 py-1 text-xs border rounded-lg transition-all"
+                  [class]="p === currentPage ? 'bg-[#c9a96e] text-white border-[#c9a96e]' : 'border-[#ece7df] hover:border-[#c9a96e]'">
+            {{ p }}
+          </button>
+          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages" class="px-3 py-1 text-xs border border-[#ece7df] rounded-lg hover:border-[#c9a96e] disabled:opacity-30 disabled:cursor-not-allowed">→</button>
+        </div>
       </div>
     </div>
   </div>
