@@ -244,44 +244,42 @@
         </div>
       </div>
 
-      <!-- הפניה לפרויקט אחר -->
-      <div class="mb-4">
-        <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold block mb-2">הפניה לפרויקט אחר</span>
-
-      <!-- מתעניין בפרויקט -->
-      <div class="mb-4">
-        <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold block mb-2">מתעניין בפרויקט</span>
-        <div class="bg-[#f9f6f1] rounded-lg p-3">
-          <select [value]="selectedLead?.interestedInProject || ''" (change)="updateProperty('interestedInProject', $any($event.target).value)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs cursor-pointer">
-            <option value="">בחר</option>
-            <option *ngFor="let proj of projectsList" [value]="proj">{{ proj }}</option>
-          </select>
-          <div class="flex gap-2 mt-2">
-            <input type="text" [(ngModel)]="newProjectName" placeholder="הוסף פרויקט חדש..." class="flex-1 bg-white border border-[#ece7df] rounded-lg px-2 py-1 text-xs outline-none focus:border-[#c9a96e]" />
-            <button (click)="addProject()" class="text-[10px] bg-[#c9a96e] text-white px-2 py-1 rounded-lg font-medium">+</button>
+      <!-- מתעניין בפרויקט + הפניה לפרויקט אחר -->
+      <div class="mb-4 bg-[#f9f6f1] rounded-lg p-4">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold block mb-2">מתעניין בפרויקט</span>
+            <select [value]="selectedLead?.interestedInProject || ''" (change)="updateProperty('interestedInProject', $any($event.target).value)" class="w-full bg-white border border-[#ece7df] rounded-lg px-2 py-1.5 outline-none text-[#1a1a1a] text-xs cursor-pointer">
+              <option value="">בחר</option>
+              <option *ngFor="let proj of projectsList" [value]="proj">{{ proj }}</option>
+            </select>
+            <div class="flex gap-2 mt-2">
+              <input type="text" [(ngModel)]="newProjectName" placeholder="הוסף פרויקט חדש..." class="flex-1 bg-white border border-[#ece7df] rounded-lg px-2 py-1 text-xs outline-none focus:border-[#c9a96e]" />
+              <button (click)="addProject()" class="text-[10px] bg-[#c9a96e] text-white px-2.5 py-1 rounded-lg font-medium">+</button>
+            </div>
           </div>
-        </div>
-      </div>
-        <div class="bg-[#f9f6f1] rounded-lg p-3">
-          <select [value]="selectedLead?.referralProject || ''" (change)="updateProperty('referralProject', $any($event.target).value)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs cursor-pointer">
-            <option value="">בחר</option>
-            <option value="הפניה לפרויקט אחר">הפניה לפרויקט אחר</option>
-            <option value="Oren Cohen יד 2">Oren Cohen יד 2</option>
-            <option value="השלושה">השלושה</option>
-            <option value="יפו 184">יפו 184</option>
-            <option value="עדן">עדן</option>
-            <option value="בית הערבה">בית הערבה</option>
-            <option value="תיבת האוצרות">תיבת האוצרות</option>
-            <option value="נוף הנגיד - שמואל הנגיד 15">נוף הנגיד - שמואל הנגיד 15</option>
-            <option value="אינדפנדנס - מאיר שחם 3-1">אינדפנדנס - מאיר שחם 3-1</option>
-            <option value="לינקולן - בן דוד">לינקולן - בן דוד</option>
-            <option value="מאיר שחם - בן דוד">מאיר שחם - בן דוד</option>
-            <option value="קרן היסוד 15 - בן דוד">קרן היסוד 15 - בן דוד</option>
-            <option value="ספקים">ספקים</option>
-            <option value="סוקולוב 6 - טלביה פארק">סוקולוב 6 - טלביה פארק</option>
-            <option value="סוכנים-עסקאות">סוכנים-עסקאות</option>
-            <option value="ניתאי הארבלי">ניתאי הארבלי</option>
-          </select>
+          <div>
+            <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold block mb-2">הפניה לפרויקט אחר</span>
+            <select [value]="selectedLead?.referralProject || ''" (change)="updateProperty('referralProject', $any($event.target).value)" class="w-full bg-white border border-[#ece7df] rounded-lg px-2 py-1.5 outline-none text-[#1a1a1a] text-xs cursor-pointer">
+              <option value="">בחר</option>
+              <option value="הפניה לפרויקט אחר">הפניה לפרויקט אחר</option>
+              <option value="Oren Cohen יד 2">Oren Cohen יד 2</option>
+              <option value="השלושה">השלושה</option>
+              <option value="יפו 184">יפו 184</option>
+              <option value="עדן">עדן</option>
+              <option value="בית הערבה">בית הערבה</option>
+              <option value="תיבת האוצרות">תיבת האוצרות</option>
+              <option value="נוף הנגיד - שמואל הנגיד 15">נוף הנגיד - שמואל הנגיד 15</option>
+              <option value="אינדפנדנס - מאיר שחם 3-1">אינדפנדנס - מאיר שחם 3-1</option>
+              <option value="לינקולן - בן דוד">לינקולן - בן דוד</option>
+              <option value="מאיר שחם - בן דוד">מאיר שחם - בן דוד</option>
+              <option value="קרן היסוד 15 - בן דוד">קרן היסוד 15 - בן דוד</option>
+              <option value="ספקים">ספקים</option>
+              <option value="סוקולוב 6 - טלביה פארק">סוקולוב 6 - טלביה פארק</option>
+              <option value="סוכנים-עסקאות">סוכנים-עסקאות</option>
+              <option value="ניתאי הארבלי">ניתאי הארבלי</option>
+            </select>
+          </div>
         </div>
       </div>
 
