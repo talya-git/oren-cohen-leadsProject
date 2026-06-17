@@ -33,6 +33,24 @@ export class AgentDashboardComponent implements OnInit {
   propertyTypes = ['דירה', 'פנטהאוז', 'דירת גן', 'בית פרטי', 'וילה', 'דופלקס', 'סטודיו'];
   allAmenities = ['מרפסת', 'מחסן', 'חניה', 'ממד', 'מעלית', 'גישה לנכים', 'נוף'];
   allNearBy = ['בית כנסת', 'סופרים'];
+  allObjections = [
+    'כספי', 'לא בתקציב', 'מחיר', 'תנאי תשלום', 'מדד תשומות הבניה',
+    'מיקום לא מתאים', 'כביש ראשי',
+    'מרפסת/גינה', 'תכנון הדירה', 'שטח הדירה', 'כיווני אוויר', 'חוסר חניה', 'חניה לא מתאימה',
+    'חוסר מחסן', 'חוסר מעלית שבת',
+    'אין דירה מתאימה', 'לא מעוניין בתמ״א 38',
+    'היתר בנייה', 'מלאי הדירות אזל', 'קבוצת רכישה', 'ממתין לתחילת ביצוע', 'בניין רב קומות',
+    'קומה',
+    'קנה ידԲ2', 'רכשו בפרויקט אחר', 'בעיות מימון מצד הלקוח',
+    'קנה בעיר אחרת', 'מחפשים בעיר אחרת', 'ירדו מקנייה',
+    'מוכרים דירה קיימת', 'ממתינים לבניין הבא', 'השכרה',
+    'הסר',
+    'מו״מ נכשל', 'מו״מ משפטי נכשל', 'ביטול עסקה אחרי הסכם',
+    'ביטול הרשמה', 'אין מענה', 'פניה לא רלוונטית לשיווק', 'ריגול תעשייתי', 'ליד פסול!',
+    'בטחונות לא מספקות',
+    'יצירת קשר באחריות הלקוח', 'התנגדות לא מוגדרת',
+    'קורונה', 'התיישנות', 'מאגר ישן'
+  ];
 
   constructor(public auth: AuthService, private leadsService: LeadsService) {}
 
@@ -140,6 +158,20 @@ export class AgentDashboardComponent implements OnInit {
 
   isNearBySelected(place: string): boolean {
     return this.getNearBy(this.selectedLead!).includes(place);
+  }
+
+  getObjections(lead: Lead): string[] {
+    try { return JSON.parse((lead as any).objections || '[]'); } catch { return []; }
+  }
+
+  isObjectionSelected(obj: string): boolean {
+    return this.getObjections(this.selectedLead!).includes(obj);
+  }
+
+  toggleObjection(obj: string): void {
+    const current = this.getObjections(this.selectedLead!);
+    const updated = current.includes(obj) ? current.filter(o => o !== obj) : [...current, obj];
+    this.updateProperty('objections', JSON.stringify(updated));
   }
 
   toggleAmenity(amenity: string): void {

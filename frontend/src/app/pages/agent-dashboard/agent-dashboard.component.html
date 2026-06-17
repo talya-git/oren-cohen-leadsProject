@@ -133,12 +133,83 @@
           <input type="text" [value]="selectedLead.intent || ''" (change)="updateField('intent', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="קניה/שכירות/השקעה" />
         </div>
         <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
-          <label class="text-[#c9a96e] font-medium block mb-1">הערות</label>
-          <input type="text" [value]="selectedLead.notes || ''" (change)="updateField('notes', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="הוסף הערה..." />
+          <label class="text-[#c9a96e] font-medium block mb-1">קומה</label>
+          <input type="text" [value]="selectedLead.floor || ''" (change)="updateField('floor', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="לא צוין" />
+        </div>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">מימון</label>
+          <input type="text" [value]="selectedLead.financing || ''" (change)="updateField('financing', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="הון עצמי/משכנתא" />
+        </div>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">תזמון</label>
+          <input type="text" [value]="selectedLead.timeline || ''" (change)="updateField('timeline', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="לא צוין" />
+        </div>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">מייל</label>
+          <input type="email" [value]="selectedLead.email || ''" (change)="updateField('email', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="לא צוין" />
         </div>
         <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
           <label class="text-[#c9a96e] font-medium block mb-1">מקור הגעה</label>
           <span class="text-[#1a1a1a]">{{ selectedLead.source || 'לא צוין' }}</span>
+        </div>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">הערות</label>
+          <input type="text" [value]="selectedLead.notes || ''" (change)="updateField('notes', $event)" class="w-full bg-transparent outline-none text-[#1a1a1a] text-xs" placeholder="הוסף הערה..." />
+        </div>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">סוג נכס</label>
+          <span class="text-[#1a1a1a]">{{ selectedLead.propertyType || 'לא צוין' }}</span>
+        </div>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 text-xs">
+          <label class="text-[#c9a96e] font-medium block mb-1">הפניה לפרויקט</label>
+          <span class="text-[#1a1a1a]">{{ selectedLead.referralProject || 'לא צוין' }}</span>
+        </div>
+      </div>
+
+      <!-- תוספות -->
+      <div class="mb-4">
+        <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold block mb-2">תוספות</span>
+        <div class="flex flex-wrap gap-2">
+          <label *ngFor="let amenity of allAmenities" class="flex items-center gap-1.5 text-[11px] bg-white border border-[#ece7df] px-3 py-1.5 rounded-full cursor-pointer hover:border-[#c9a96e] transition-all"
+                 [class.bg-[#c9a96e]]="isAmenitySelected(amenity)" [class.text-white]="isAmenitySelected(amenity)" [class.border-[#c9a96e]]="isAmenitySelected(amenity)">
+            <input type="checkbox" [checked]="isAmenitySelected(amenity)" (change)="toggleAmenity(amenity)" class="hidden" />
+            {{ amenity }}
+          </label>
+        </div>
+      </div>
+
+      <!-- כיווני אוויר -->
+      <div class="mb-4">
+        <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold block mb-2">כיווני אוויר</span>
+        <div class="flex gap-2">
+          <button *ngFor="let n of [1,2,3,4]" (click)="updateProperty('airDirections', n)"
+                  class="w-10 h-10 rounded-lg border text-sm font-semibold transition-all cursor-pointer"
+                  [class]="selectedLead.airDirections === n ? 'bg-[#c9a96e] text-white border-[#c9a96e]' : 'bg-white border-[#ece7df] text-[#6b6b6b] hover:border-[#c9a96e]'">
+            {{ n }}
+          </button>
+        </div>
+      </div>
+
+      <!-- קרבה ל -->
+      <div class="mb-4">
+        <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold block mb-2">קרבה ל</span>
+        <div class="flex flex-wrap gap-2">
+          <label *ngFor="let place of allNearBy" class="flex items-center gap-1.5 text-[11px] bg-white border border-[#ece7df] px-3 py-1.5 rounded-full cursor-pointer hover:border-[#c9a96e] transition-all"
+                 [class.bg-[#c9a96e]]="isNearBySelected(place)" [class.text-white]="isNearBySelected(place)" [class.border-[#c9a96e]]="isNearBySelected(place)">
+            <input type="checkbox" [checked]="isNearBySelected(place)" (change)="toggleNearBy(place)" class="hidden" />
+            {{ place }}
+          </label>
+        </div>
+      </div>
+
+      <!-- התנגדויות -->
+      <div class="mb-5">
+        <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold block mb-2">התנגדויות</span>
+        <div class="bg-[#f9f6f1] rounded-lg p-3 max-h-40 overflow-y-auto space-y-1">
+          <label *ngFor="let obj of allObjections" class="flex items-center gap-2 text-[11px] text-[#4a4a4a] cursor-pointer hover:text-[#c9a96e] py-0.5">
+            <input type="checkbox" [checked]="isObjectionSelected(obj)" (change)="toggleObjection(obj)" class="accent-[#c9a96e] w-3.5 h-3.5" />
+            {{ obj }}
+          </label>
         </div>
       </div>
 
