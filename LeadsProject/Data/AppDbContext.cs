@@ -8,6 +8,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<User> Users => Set<User>();
     public DbSet<Lead> Leads => Set<Lead>();
     public DbSet<Project> Projects => Set<Project>();
+    public DbSet<AmenityOption> AmenityOptions => Set<AmenityOption>();
+    public DbSet<NearByOption> NearByOptions => Set<NearByOption>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

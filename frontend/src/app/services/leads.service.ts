@@ -90,4 +90,20 @@ export class LeadsService {
   addProject(name: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/projects`, { name }, { headers: this.headers });
   }
+
+  getAmenityOptions(): Observable<{ id: number; name: string }[]> {
+    return this.http.get<{ id: number; name: string }[]>(`${this.apiUrl}/options/amenities`, { headers: this.headers });
+  }
+
+  addAmenityOption(name: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/options/amenities`, { name }, { headers: this.headers });
+  }
+
+  getNearByOptions(): Observable<{ id: number; name: string }[]> {
+    return this.http.get<{ id: number; name: string }[]>(`${this.apiUrl}/options/nearby`, { headers: this.headers });
+  }
+
+  addNearByOption(name: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/options/nearby`, { name }, { headers: this.headers });
+  }
 }

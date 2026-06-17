@@ -23,8 +23,8 @@ export class ManagerDashboardComponent implements OnInit {
   pageSize = 50;
 
   propertyTypes = ['דירה', 'פנטהאוז', 'דירת גן', 'בית פרטי', 'וילה', 'דופלקס', 'סטודיו'];
-  allAmenities = ['מרפסת', 'מחסן', 'חניה', 'ממד', 'מעלית', 'גישה לנכים', 'נוף'];
-  allNearBy = ['בית כנסת', 'סופרים'];
+  allAmenities: string[] = [];
+  allNearBy: string[] = [];
   newProjectName = '';
   newAmenity = '';
   newNearBy = '';
@@ -72,6 +72,8 @@ export class ManagerDashboardComponent implements OnInit {
 
   loadProjects(): void {
     this.leadsService.getProjects().subscribe(p => this.projectsList = p.map(x => x.name));
+    this.leadsService.getAmenityOptions().subscribe(a => this.allAmenities = a.map(x => x.name));
+    this.leadsService.getNearByOptions().subscribe(n => this.allNearBy = n.map(x => x.name));
   }
 
   loadLeads(): void {
@@ -250,20 +252,20 @@ export class ManagerDashboardComponent implements OnInit {
 
   addAmenity(): void {
     if (!this.newAmenity.trim()) return;
-    if (!this.allAmenities.includes(this.newAmenity.trim())) {
-      this.allAmenities.push(this.newAmenity.trim());
-    }
-    this.toggleAmenity(this.newAmenity.trim());
-    this.newAmenity = '';
+    this.leadsService.addAmenityOption(this.newAmenity.trim()).subscribe(() => {
+      this.leadsService.getAmenityOptions().subscribe(a => this.allAmenities = a.map(x => x.name));
+      this.toggleAmenity(this.newAmenity.trim());
+      this.newAmenity = '';
+    });
   }
 
   addNearBy(): void {
     if (!this.newNearBy.trim()) return;
-    if (!this.allNearBy.includes(this.newNearBy.trim())) {
-      this.allNearBy.push(this.newNearBy.trim());
-    }
-    this.toggleNearBy(this.newNearBy.trim());
-    this.newNearBy = '';
+    this.leadsService.addNearByOption(this.newNearBy.trim()).subscribe(() => {
+      this.leadsService.getNearByOptions().subscribe(n => this.allNearBy = n.map(x => x.name));
+      this.toggleNearBy(this.newNearBy.trim());
+      this.newNearBy = '';
+    });
   }
 
   addProject(): void {
