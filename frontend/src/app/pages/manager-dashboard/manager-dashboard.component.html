@@ -38,7 +38,7 @@
               <th class="px-3 py-3 text-right">תקציב</th>
               <th class="px-3 py-3 text-right">חדרים</th>
               <th class="px-3 py-3 text-right">דירוג</th>
-              <th class="px-3 py-3 text-right">פרויקט</th>
+              <th class="px-3 py-3 text-right">מתעניין בפרויקט</th>
               <th class="px-3 py-3 text-right">משויך ל</th>
               <th class="px-3 py-3 text-right">תאריך</th>
             </tr>
@@ -50,8 +50,8 @@
                 [class.border-r-emerald-400]="lead.rating==='hot'"
                 [class.border-r-amber-400]="lead.rating==='warm'"
                 [class.border-r-red-400]="lead.rating==='cold'">
-              <td class="px-3 py-2.5 font-medium text-[#1a1a1a]">{{ lead.contactName || 'ללא שם' }}</td>
-              <td class="px-3 py-2.5 text-[#6b6b6b]" dir="ltr">{{ lead.phone || '—' }}</td>
+              <td class="px-3 py-2.5 font-medium text-[#1a1a1a] whitespace-nowrap">{{ lead.contactName || 'ללא שם' }}</td>
+              <td class="px-3 py-2.5 text-[#6b6b6b] whitespace-nowrap" dir="ltr">{{ lead.phone || '—' }}</td>
               <td class="px-3 py-2.5 text-[#6b6b6b]">{{ lead.area || '—' }}</td>
               <td class="px-3 py-2.5 text-[#6b6b6b]">{{ lead.budget || '—' }}</td>
               <td class="px-3 py-2.5 text-[#6b6b6b]">{{ lead.rooms || '—' }}</td>
