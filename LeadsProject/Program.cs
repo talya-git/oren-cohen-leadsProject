@@ -87,8 +87,10 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     if (db.Database.IsNpgsql())
     {
+        // Drop and recreate to ensure schema is correct
+        db.Database.EnsureDeleted();
         db.Database.EnsureCreated();
-        // Seed users if empty
+        // Seed users
         if (!db.Users.Any())
         {
             db.Users.AddRange(
