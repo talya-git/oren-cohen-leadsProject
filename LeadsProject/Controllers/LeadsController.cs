@@ -68,6 +68,8 @@ public class LeadsController(AppDbContext db) : ControllerBase
         if (req.Amenities != null) lead.Amenities = req.Amenities;
         if (req.AirDirections != null) lead.AirDirections = req.AirDirections;
         if (req.NearBy != null) lead.NearBy = req.NearBy;
+        if (req.Objections != null) lead.Objections = req.Objections;
+        if (req.ReferralProject != null) lead.ReferralProject = req.ReferralProject;
         lead.UpdatedAt = DateTime.UtcNow;
 
         await db.SaveChangesAsync();

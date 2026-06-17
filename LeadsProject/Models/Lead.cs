@@ -18,6 +18,8 @@ public class Lead
     public string? Amenities { get; set; }     // JSON array: ["מרפסת","מחסן","חניה","ממד","מעלית","גישה לנכים","נוף"]
     public int? AirDirections { get; set; }    // 1/2/3/4
     public string? NearBy { get; set; }        // JSON array: ["בית כנסת","סופרים"]
+    public string? Objections { get; set; }     // JSON array: ["כספי","מחיר",...]
+    public string? ReferralProject { get; set; } // הפניה לפרויקט אחר
     public string Rating { get; set; } = "none";
     public string Status { get; set; } = "new";
     public int? AssignedToId { get; set; }
