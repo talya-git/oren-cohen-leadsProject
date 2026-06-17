@@ -273,7 +273,7 @@
         <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold block mb-2">תוספות</span>
         <div class="flex flex-wrap gap-2">
           <label *ngFor="let amenity of allAmenities" class="flex items-center gap-1.5 text-[11px] px-3 py-1.5 rounded-full cursor-pointer border transition-all"
-                 [class]="isAmenitySelected(amenity) ? 'bg-[#1a1a1a] text-white border-[#1a1a1a]' : 'bg-white border-[#ece7df] text-[#6b6b6b] hover:border-[#c9a96e]'">
+                 [class]="isAmenitySelected(amenity) ? 'bg-[#c9a96e] text-white border-[#c9a96e]' : 'bg-white border-[#ece7df] text-[#6b6b6b] hover:border-[#c9a96e]'">
             <input type="checkbox" [checked]="isAmenitySelected(amenity)" (change)="toggleAmenity(amenity)" class="hidden" />
             {{ amenity }}
           </label>
@@ -301,7 +301,7 @@
         <span class="text-[10px] uppercase tracking-[2px] text-[#c9a96e] font-semibold block mb-2">קרבה ל</span>
         <div class="flex flex-wrap gap-2">
           <label *ngFor="let place of allNearBy" class="flex items-center gap-1.5 text-[11px] px-3 py-1.5 rounded-full cursor-pointer border transition-all"
-                 [class]="isNearBySelected(place) ? 'bg-[#1a1a1a] text-white border-[#1a1a1a]' : 'bg-white border-[#ece7df] text-[#6b6b6b] hover:border-[#c9a96e]'">
+                 [class]="isNearBySelected(place) ? 'bg-[#c9a96e] text-white border-[#c9a96e]' : 'bg-white border-[#ece7df] text-[#6b6b6b] hover:border-[#c9a96e]'">
             <input type="checkbox" [checked]="isNearBySelected(place)" (change)="toggleNearBy(place)" class="hidden" />
             {{ place }}
           </label>
