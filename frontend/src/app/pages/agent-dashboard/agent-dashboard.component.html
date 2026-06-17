@@ -58,9 +58,9 @@
             <tr *ngFor="let lead of paginatedLeads" (click)="openDetail(lead)"
                 class="border-b border-[#f0ebe3] hover:bg-[#f9f6f1] cursor-pointer transition-colors"
                 [class.border-r-[3px]]="lead.rating!=='none'"
-                [class.border-r-red-400]="lead.rating==='hot'"
+                [class.border-r-emerald-400]="lead.rating==='hot'"
                 [class.border-r-amber-400]="lead.rating==='warm'"
-                [class.border-r-emerald-400]="lead.rating==='cold'">
+                [class.border-r-red-400]="lead.rating==='cold'">
               <td class="px-3 py-2.5 font-medium text-[#1a1a1a]">{{ lead.contactName || 'ללא שם' }}</td>
               <td class="px-3 py-2.5 text-[#6b6b6b]" dir="ltr">{{ lead.phone || '—' }}</td>
               <td class="px-3 py-2.5 text-[#6b6b6b]">{{ lead.area || '—' }}</td>
@@ -68,8 +68,8 @@
               <td class="px-3 py-2.5 text-[#6b6b6b]">{{ lead.rooms || '—' }}</td>
               <td class="px-3 py-2.5">
                 <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full"
-                      [ngClass]="{'bg-red-50 text-red-500': lead.rating==='hot', 'bg-amber-50 text-amber-600': lead.rating==='warm', 'bg-emerald-50 text-emerald-600': lead.rating==='cold', 'bg-gray-50 text-gray-400': lead.rating==='none'}">
-                  {{ lead.rating === 'hot' ? '🔴' : lead.rating === 'warm' ? '🟠' : lead.rating === 'cold' ? '🟢' : '—' }}
+                      [ngClass]="{'bg-emerald-50 text-emerald-600': lead.rating==='hot', 'bg-amber-50 text-amber-600': lead.rating==='warm', 'bg-red-50 text-red-500': lead.rating==='cold', 'bg-gray-50 text-gray-400': lead.rating==='none'}">
+                  {{ lead.rating === 'hot' ? '🟢 חם' : lead.rating === 'warm' ? '🟠 בינוני' : lead.rating === 'cold' ? '🔴 קר' : '—' }}
                 </span>
               </td>
               <td class="px-3 py-2.5">
