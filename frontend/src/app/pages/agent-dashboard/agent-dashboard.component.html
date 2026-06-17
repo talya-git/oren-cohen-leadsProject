@@ -32,14 +32,9 @@
       <option value="">כל הסוכנים</option>
       <option *ngFor="let agent of agents" [value]="agent.name">{{ agent.name }}</option>
     </select>
-    <select [(ngModel)]="filterArea" (change)="applyFilters()" class="text-xs border border-[#ece7df] rounded-lg px-3 py-1.5 bg-white outline-none text-[#4a4a4a] cursor-pointer">
-      <option value="">כל האזורים</option>
-      <option *ngFor="let area of uniqueAreas" [value]="area">{{ area }}</option>
-    </select>
-    <select [(ngModel)]="filterProject" (change)="applyFilters()" class="text-xs border border-[#ece7df] rounded-lg px-3 py-1.5 bg-white outline-none text-[#4a4a4a] cursor-pointer">
-      <option value="">כל הפרויקטים</option>
-      <option *ngFor="let proj of uniqueProjects" [value]="proj">{{ proj }}</option>
-    </select>
+    <input type="text" [(ngModel)]="filterArea" (input)="applyFilters()" placeholder="🔍 חיפוש אזור/שכונה..." class="text-xs border border-[#ece7df] rounded-lg px-3 py-1.5 bg-white outline-none text-[#4a4a4a] w-44" />
+    <input type="text" [(ngModel)]="filterProject" (input)="applyFilters()" placeholder="🔍 חיפוש פרויקט..." class="text-xs border border-[#ece7df] rounded-lg px-3 py-1.5 bg-white outline-none text-[#4a4a4a] w-44" />
+    <input type="text" [(ngModel)]="filterFreeText" (input)="applyFilters()" placeholder="🔍 חיפוש חופשי (שם, טלפון, הערות...)" class="text-xs border border-[#ece7df] rounded-lg px-3 py-1.5 bg-white outline-none text-[#4a4a4a] flex-1 min-w-[200px]" />
   </div>
 
   <!-- Grid -->

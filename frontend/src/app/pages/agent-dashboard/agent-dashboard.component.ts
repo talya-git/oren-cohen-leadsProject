@@ -26,6 +26,7 @@ export class AgentDashboardComponent implements OnInit {
   filterAgent = '';
   filterArea = '';
   filterProject = '';
+  filterFreeText = '';
 
   propertyTypes = ['דירה', 'פנטהאוז', 'דירת גן', 'בית פרטי', 'וילה', 'דופלקס', 'סטודיו'];
   allAmenities = ['מרפסת', 'מחסן', 'חניה', 'ממד', 'מעלית', 'גישה לנכים', 'נוף'];
@@ -58,10 +59,22 @@ export class AgentDashboardComponent implements OnInit {
       leads = leads.filter(l => l.assignedTo?.name === this.filterAgent);
     }
     if (this.filterArea) {
-      leads = leads.filter(l => l.area?.includes(this.filterArea));
+      leads = leads.filter(l => l.area?.toLowerCase().includes(this.filterArea.toLowerCase()));
     }
     if (this.filterProject) {
-      leads = leads.filter(l => l.referralProject === this.filterProject);
+      leads = leads.filter(l => l.referralProject?.toLowerCase().includes(this.filterProject.toLowerCase()));
+    }
+    if (this.filterFreeText) {
+      const q = this.filterFreeText.toLowerCase();
+      leads = leads.filter(l =>
+        (l.contactName || '').toLowerCase().includes(q) ||
+        (l.phone || '').includes(q) ||
+        (l.area || '').toLowerCase().includes(q) ||
+        (l.notes || '').toLowerCase().includes(q) ||
+        (l.budget || '').toLowerCase().includes(q) ||
+        (l.source || '').toLowerCase().includes(q) ||
+        (l.referralProject || '').toLowerCase().includes(q)
+      );
     }
 
     this.filteredLeads = leads;
