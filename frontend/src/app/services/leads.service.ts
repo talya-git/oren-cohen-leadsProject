@@ -26,6 +26,7 @@ export interface Lead {
   rating: string;
   status: string;
   assignedToId: number | null;
+  assignedTo?: { id: number; name: string; role: string } | null;
   assignedToName?: string;
   transcript: string;
   notes: string;
