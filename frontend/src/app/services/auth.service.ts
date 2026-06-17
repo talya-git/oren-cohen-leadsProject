@@ -52,7 +52,7 @@ export class AuthService {
   }
 
   setPassword(name: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/set-password`, { name, password });
+    return this.http.post(`${this.apiUrl}/auth/set-password`, { name, newPassword: password });
   }
 
   checkUser(name: string): Observable<{ hasPassword: boolean; role: string }> {
