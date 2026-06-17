@@ -86,9 +86,28 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     if (db.Database.IsNpgsql())
+    {
         db.Database.EnsureCreated();
+        // Seed users if empty
+        if (!db.Users.Any())
+        {
+            db.Users.AddRange(
+                new LeadsProject.Models.User { Name = "מנהל", PasswordHash = BCrypt.Net.BCrypt.HashPassword("1234"), Role = "manager" },
+                new LeadsProject.Models.User { Name = "אריה", Role = "agent" },
+                new LeadsProject.Models.User { Name = "דב", Role = "agent" },
+                new LeadsProject.Models.User { Name = "רבקה", Role = "agent" },
+                new LeadsProject.Models.User { Name = "מוישי", Role = "agent" },
+                new LeadsProject.Models.User { Name = "מיכאל", Role = "agent" },
+                new LeadsProject.Models.User { Name = "אהרון", Role = "agent" },
+                new LeadsProject.Models.User { Name = "ליסה", Role = "agent" }
+            );
+            db.SaveChanges();
+        }
+    }
     else
+    {
         db.Database.Migrate();
+    }
 }
 
 if (app.Environment.IsDevelopment())
@@ -104,6 +123,19 @@ else
 
 // app.UseHttpsRedirection();
 app.UseCors("AllowAngular");
+
+// Handle errors with CORS headers
+app.Use(async (context, next) =>
+{
+    try { await next(); }
+    catch (Exception ex)
+    {
+        context.Response.StatusCode = 500;
+        context.Response.ContentType = "application/json";
+        await context.Response.WriteAsync($"{{\"error\": \"{ex.Message.Replace("\"", "'")}\"}}");
+    }
+});
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
