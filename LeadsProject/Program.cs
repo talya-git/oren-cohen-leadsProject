@@ -14,7 +14,8 @@ if (connStr.StartsWith("postgres://") || connStr.StartsWith("postgresql://"))
 {
     var uri = new Uri(connStr);
     var userInfo = uri.UserInfo.Split(':');
-    connStr = $"Host={uri.Host};Port={uri.Port};Database={uri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=true";
+    var port = uri.Port > 0 ? uri.Port : 5432;
+    connStr = $"Host={uri.Host};Port={port};Database={uri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=true";
 }
 
 if (connStr.Contains("Host=") || connStr.Contains("host="))
