@@ -7,7 +7,7 @@ namespace LeadsProject.Controllers;
 
 [ApiController]
 [Route("api/agents")]
-[Authorize(Roles = "manager")]
+[Authorize]
 public class AgentsController(AppDbContext db) : ControllerBase
 {
     [HttpGet]
